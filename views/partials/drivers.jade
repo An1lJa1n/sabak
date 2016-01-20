@@ -1,0 +1,62 @@
+modal(title="Add new Vehical", visible="showModal")
+	form(role="form")
+		div(class="form-group")
+			label(for="vehicalNumber") Vehical number
+			input(class="form-control", id="vehicalNumber", ng-model = "driver.vehicalNumber", placeholder="Enter Vehical Number")
+		div(class="form-group")
+			label(for="owner") Owner Name
+			input(class="form-control", id="owner", ng-model = "driver.owner", placeholder="Enter Owner Name")
+		div(class="form-group")
+			label(for="address") Address
+			input(class="form-control", id="address", ng-model = "driver.address", placeholder="Address")
+		div(class="form-group")
+			label(for="chasis") Chasis Number
+			input(class="form-control", id="chasis", ng-model = "driver.chasis", placeholder="Enter Chasis Number")
+		div(class="form-group")
+			label(for="engineDetails") Engine Details
+			input(class="form-control", id="engineDetails", ng-model = "driver.engineDetails", placeholder="Engine Details")
+		div(class="form-group")
+			label(for="permitType") Permit Type
+			input(class="form-control", id="permitType", ng-model = "driver.permitType", placeholder="Permit Type")
+
+		button(class="btn btn-default" ng-click="save()")
+			|Save
+div(class= "row")
+	div(class= "col-md-12", style="font-size:20px")
+		div(style="padding: 4px")
+			div(style="padding 4px;")
+				b
+					|Vehical List
+div(class= "row")
+	div(class= "col-md-12")				
+		a(href="javascript:void(0)",id= "btnAddNew" ng-click="toggleModal()")
+			i(class="fa fa-plus")
+			|Add a Vehical	
+div(class= "row")
+	div(class= "col-md-12")
+		table(st-table="displayDrivers",st-safe-src="drivers",class="table table-striped")
+			thead
+				tr
+					th(colspan="5")
+						input(st-search="", class="form-control", placeholder="Search ...", type="text")
+				tr
+					th(st-sort="vehicalNumber") Vehical #
+					th(st-sort="owner") Owner
+					th(st-sort="address") Address
+					th(st-sort="chasis") Chasis Number
+					th(st-sort="engineDetails") Engine Details
+					th(st-sort="permitType") Permit Type
+			tbody
+				tr(ng-repeat="row in displayDrivers")
+					td {{row.vehicalNumber}}
+					td {{row.owner}}
+					td {{row.address}}
+					td {{row.chasis}}
+					td {{row.engineDetails}}
+					td {{row.permitType}}
+					td(style="width:20px")
+						button(type="button", ng-click="editItem(row)", class="btn btn-sm btn-primary")
+							i(class="glyphicon glyphicon-pencil")
+					td(style="width:20px")
+						button(type="button", ng-click="removeItem(row)", class="btn btn-sm btn-danger")
+							i(class="glyphicon glyphicon-trash")		
