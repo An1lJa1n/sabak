@@ -40,7 +40,6 @@ p.status.good, p.good {
 
 form label {
    display: block;
-   margin: 15px 0;
 }
 
 form label span {
@@ -81,4 +80,15 @@ fieldset {
 
 .header{
   position: fixed; background-color: #fff; height: 50px; border-bottom: 1px solid black; top: 0; width: 100%; left: 0; z-index: 1;
+}
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    height: 65px;
+    text-align: center;
+    padding-top: 15px;
+    margin: 10px;
+}
+.dragover {
+    border: 5px dashed blue;
 }

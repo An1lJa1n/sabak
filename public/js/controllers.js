@@ -51,13 +51,87 @@ angular.module("myApp.controllers", [])
   })
   .controller('appsCtrl', function($scope,$http) {
   })
-  .controller('vehicalCtrl',function($scope,$http,$filter) {
+  .controller('vehicalCtrl',function($scope,$http,$filter,Upload, $timeout) {
     $scope.driver = {};
     $scope.drivers = [];
+    $scope.log = '';
+    
+    $scope.expiryPicker = {opened: false};
+    $scope.fitnessExpiryPicker = {opened: false};
+    $scope.permitExpiryPicker = {opened: false};
+    $scope.nationalPermitExpiryPicker = {opened: false};
+    $scope.insuranceExpiryPicker = {opened: false};
+    $scope.professionalTaxExpiryPicker = {opened: false};
+
+    $scope.openExpiryPicker = function() {$scope.expiryPicker.opened = true;};
+    $scope.openFitnessExpiryPicker = function() {$scope.fitnessExpiryPicker.opened = true;};
+    $scope.openPermitExpiryPicker = function() {$scope.permitExpiryPicker.opened = true;};
+    $scope.openNationalPermitExpiryPicker = function() {$scope.nationalPermitExpiryPicker.opened = true;};
+    $scope.openInsuranceExpiryPicker = function() {$scope.insuranceExpiryPicker.opened = true;};
+    $scope.openProfessionalTaxExpiryPicker = function() {$scope.professionalTaxExpiryPicker.opened = true;};
+
+    $scope.$watch('files', function () {
+        $scope.upload($scope.files);
+    });
+    $scope.$watch('file', function () {
+        if ($scope.file != null) {
+            $scope.files = [$scope.file]; 
+        }
+    });
+    $scope.formatDate = function(value){
+        if(!value) return "";
+        if(value.length>10)
+          return value.substring(0,10);
+        else
+          return "";
+    };
+    $scope.upload = function (files) {
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+              var file = files[i];
+              if (!file.$error) {
+                Upload.upload({
+                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                    data: {
+                      file: file  
+                    }
+                }).then(function (resp) {
+                    $timeout(function() {
+                        $scope.log = 'file: ' +
+                        resp.config.data.file.name +
+                        ', Response: ' + JSON.stringify(resp.data) +
+                        '\n' + $scope.log;
+                    });
+                }, null, function (evt) {
+                    var progressPercentage = parseInt(100.0 *
+                        evt.loaded / evt.total);
+                    $scope.log = 'progress: ' + progressPercentage + 
+                      '% ' + evt.config.data.file.name + '\n' + 
+                      $scope.log;
+                });
+              }
+            }
+        }
+    };
+    $scope.filterStatuses = [{id:1,description: "Pending"},{id:2, description:"Overdue"},{id:3, description:"Expired"}];
+    $scope.filters = [
+        {id:1, text:'Tax'},
+        {id:2, text:'Fitness'},
+        {id:3, text:'Permit'},
+        {id:4, text:'National Permit'},
+        {id:5, text:'Insurance'},
+        {id:6, text:'Prof. Tax'}
+    ];
+    $scope.showDetailModal=false;
     $scope.showModal = false;
     $scope.toggleModal = function(){
         $scope.driver = {};
         $scope.showModal = !$scope.showModal;
+    };
+
+    $scope.showDetails=function(row){
+      $scope.driver = row;
+      $scope.showDetailModal=true;
     };
     $scope.editItem = function(row){
       $scope.driver = row;
