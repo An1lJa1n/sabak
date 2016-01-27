@@ -5,20 +5,20 @@ modal(title="Vehical Details", visible="showDetailModal")
 				label(for="vehicalNumberInfo") Vehical number
 				div(id="vehicalNumberInfo") {{driver.vehicalNumber}}
 			div(class="form-group col-md-2")
-				label(for="ownerInfo") Owner Name
-				div(id="ownerInfo") {{driver.owner}}	
-			div(class="form-group col-md-2")
 				label(for="chasisInfo") Chasis Number
-				div(id="chasisInfo") {{driver.chasis}}	
+				div(id="chasisInfo") {{driver.chasis}}
+			div(class="form-group col-md-2")
+				label(for="engineDetailsInfo") Engine Details
+				div(id="engineDetailsInfo") {{driver.engineDetails}}				
+			div(class="form-group col-md-2")
+				label(for="ownerInfo") Owner Name
+				div(id="ownerInfo") {{driver.owner}}			
 			div(class="form-group col-md-2")
 				label(for="mobileInfo") Mobile Number
-				div(id="mobileInfo") {{driver.mobile}}	
+				div(id="mobileInfo") {{driver.mobile}}		
 			div(class="form-group col-md-2")
 				label(for="addressInfo") Address
 				div(id="addressInfo") {{driver.address}}	
-			div(class="form-group col-md-2")
-				label(for="engineDetailsInfo") Engine Details
-				div(id="engineDetailsInfo") {{driver.engineDetails}}	
 		div(class="row")
 			h4(class="modal-title", style="padding-left:15px") Paper Expiry Details
 			<hr>
@@ -56,20 +56,20 @@ modal(title="Add new Vehical", visible="showModal")
 			label(for="vehicalNumber") Vehical number
 			input(class="form-control", id="vehicalNumber", ng-model = "driver.vehicalNumber", placeholder="Enter Vehical Number")
 		div(class="form-group col-md-3")
-			label(for="owner") Owner Name
-			input(class="form-control", id="owner", ng-model = "driver.owner", placeholder="Enter Owner Name")
-		div(class="form-group col-md-3")
 			label(for="chasis") Chasis Number
 			input(class="form-control", id="chasis", ng-model = "driver.chasis", placeholder="Enter Chasis Number")
+		div(class="form-group col-md-6")
+			label(for="engineDetails") Engine Details
+			input(class="form-control", id="engineDetails", ng-model = "driver.engineDetails", placeholder="Engine Details")
+		div(class="form-group col-md-3")
+			label(for="owner") Owner Name
+			input(class="form-control", id="owner", ng-model = "driver.owner", placeholder="Enter Owner Name")
 		div(class="form-group col-md-3")
 			label(for="mobile") Mobile no
 			input(class="form-control", id="mobile", ng-model = "driver.mobile", placeholder="Mobile No")
 		div(class="form-group col-md-6")
 			label(for="address") Address
 			input(class="form-control", id="address", ng-model = "driver.address", placeholder="Address")
-		div(class="form-group col-md-6")
-			label(for="engineDetails") Engine Details
-			input(class="form-control", id="engineDetails", ng-model = "driver.engineDetails", placeholder="Engine Details")
 		div(class="") 
 			h4(class="modal-title" style="padding-left:15px") Paper Expiry Details
 		div(class="row")
@@ -124,7 +124,7 @@ div(class= "row")
 				tr
 					th(colspan="2")
 						input(st-search="", class="form-control", placeholder="Search ...", type="text")
-					th(colspan="7")
+					th(colspan="9")
 						div(class="controls")
 							select(style="width: 150px;display: inline;margin-right:30px" class= "form-control", ng-model="filterStatus", ng-options="value.id as value.description for value in filterStatuses")
 							label(ng-repeat="item in filters" style="padding-right: 10px")
@@ -133,10 +133,12 @@ div(class= "row")
 				tr
 					th(st-sort="vehicalNumber") Vehical #
 					th(st-sort="owner") Owner
-					th(st-sort="address") Address
-					th(st-sort="chasis") Chasis Number
-					th(st-sort="engineDetails") Engine Details
 					th(st-sort="mobile") Mobile Number
+					th(st-sort="taxExpiry") Tax
+					th(st-sort="fitnessExpiery") Fitness
+					th(st-sort="permitExpiery") Permit 
+					th(st-sort="insuranceExpiry") Insurance
+					th(st-sort="professionalTaxExpiry") Prof Tax
 					th
 					th
 					th
@@ -144,10 +146,12 @@ div(class= "row")
 				tr(ng-repeat="row in displayDrivers")
 					td {{row.vehicalNumber}}
 					td {{row.owner}}
-					td {{row.address}}
-					td {{row.chasis}}
-					td {{row.engineDetails}}
 					td {{row.mobile}}
+					td(style="background-color:{{getColorCode(row.taxExpiry)}}") {{formatDate(row.taxExpiry)}}
+					td(style="background-color:{{getColorCode(row.fitnessExpiry)}}") {{formatDate(row.fitnessExpiry)}}
+					td(style="background-color:{{getColorCode(row.permitExpiry)}}") {{formatDate(row.permitExpiry)}}
+					td(style="background-color:{{getColorCode(row.insuranceExpiry)}}") {{formatDate(row.insuranceExpiry)}}
+					td(style="background-color:{{getColorCode(row.professionalTaxExpiry)}}") {{formatDate(row.professionalTaxExpiry)}}
 					td(style="width:20px")
 						button(type="button", ng-click="showDetails(row)", class="btn btn-sm btn-success")
 							i(class="glyphicon glyphicon-eye-open")

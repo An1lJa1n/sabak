@@ -8,6 +8,87 @@ insuranceExpiry Insurance Expiry*/
 
 angular.module("myApp.controllers", [])
 .controller("IndexCtrl", function ($rootScope, $scope, $http) {
+    $scope.notifications ={};
+    
+    $http.get('/api/drivers/getExpiredRecord/taxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["taxExpiry_Expired"] = data;
+    });
+    $http.get('/api/drivers/getDueRecord/taxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["taxExpiry_Due"] = data;
+    });
+    $http.get('/api/drivers/getPendingRecord/taxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["taxExpiry_Pending"] = data;
+    });
+
+    $http.get('/api/drivers/getExpiredRecord/fitnessExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["fitnessExpiry_Expired"] = data;
+    });
+    $http.get('/api/drivers/getDueRecord/fitnessExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["fitnessExpiry_Due"] = data;
+    });
+    $http.get('/api/drivers/getPendingRecord/fitnessExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["fitnessExpiry_Pending"] = data;
+    });
+
+
+    $http.get('/api/drivers/getExpiredRecord/permitExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["permitExpiry_Expired"] = data;
+    });
+    $http.get('/api/drivers/getDueRecord/permitExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["permitExpiry_Due"] = data;
+    });
+    $http.get('/api/drivers/getPendingRecord/permitExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["permitExpiry_Pending"] = data;
+    });
+
+    $http.get('/api/drivers/getExpiredRecord/nationalPermitExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["nationalPermitExpiry_Expired"] = data;
+    });
+    $http.get('/api/drivers/getDueRecord/nationalPermitExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["nationalPermitExpiry_Due"] = data;
+    });
+    $http.get('/api/drivers/getPendingRecord/nationalPermitExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["nationalPermitExpiry_Pending"] = data;
+    });
+
+    $http.get('/api/drivers/getExpiredRecord/insuranceExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["insuranceExpiry_Expired"] = data;
+    });
+    $http.get('/api/drivers/getDueRecord/insuranceExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["insuranceExpiry_Due"] = data;
+    });
+    $http.get('/api/drivers/getPendingRecord/insuranceExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["insuranceExpiry_Pending"] = data;
+    });
+
+    $http.get('/api/drivers/getExpiredRecord/professionalTaxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["professionalTaxExpiry_Expired"] = data;
+    });
+    $http.get('/api/drivers/getDueRecord/professionalTaxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["professionalTaxExpiry_Due"] = data;
+    });
+    $http.get('/api/drivers/getPendingRecord/professionalTaxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["professionalTaxExpiry_Pending"] = data;
+    });          
+
 }).controller('menuCtrl', function($scope,$http,$window) {
         $scope.menu = {
         title: 'All Categories',
@@ -80,10 +161,29 @@ angular.module("myApp.controllers", [])
     });
     $scope.formatDate = function(value){
         if(!value) return "";
-        if(value.length>10)
-          return value.substring(0,10);
-        else
-          return "";
+        var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec");
+        var d = new Date(value);
+        return (d.getDate() + "-" + m_names[d.getMonth()] + "-" + d.getFullYear());
+    };
+    var dateDiff = function(value){
+      var date1 = new Date(value);
+      var date2 = new Date();
+      var timeDiff = date1.getTime()-date2.getTime();
+      return Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    };
+
+    $scope.getColorCode = function(value){
+        var colors = ["red","orange","skyblue"];
+        if(value){
+          var days = dateDiff(value);
+          if(days<=10 &&  days>1)
+            return "blue";
+          if(days==1 || days==0)
+            return "orange";
+          if(days<0)
+            return "red";
+        }
+        return "";
     };
     $scope.upload = function (files) {
         if (files && files.length) {
@@ -137,11 +237,20 @@ angular.module("myApp.controllers", [])
       $scope.driver = row;
       $scope.showModal=true;
     };
+    var transformModel = function(){
+        $scope.driver.taxExpiry = $scope.driver.taxExpiry? (new Date($scope.driver.taxExpiry)).getTime():null;
+        $scope.driver.fitnessExpiry= $scope.driver.fitnessExpiry? (new Date($scope.driver.fitnessExpiry)).getTime():null;
+        $scope.driver.permitExpiry= $scope.driver.permitExpiry?(new Date($scope.driver.permitExpiry)).getTime():null;
+        $scope.driver.nationalPermitExpiry= $scope.driver.nationalPermitExpiry?(new Date($scope.driver.nationalPermitExpiry)).getTime():null;
+        $scope.driver.insuranceExpiry= $scope.driver.insuranceExpiry?(new Date($scope.driver.insuranceExpiry)).getTime():null;
+        $scope.driver.professionalTaxExpiry= $scope.driver.professionalTaxExpiry?(new Date($scope.driver.professionalTaxExpiry)).getTime():null;
+        return $scope.driver;
+    };
     $scope.save  = function(){
       if($scope.driver.key){ //update
         var key = $scope.driver.key;
         delete $scope.driver.key;
-        $http.put('/api/drivers/' + key, $scope.driver).
+        $http.put('/api/drivers/' + key, transformModel()).
         success(function(data) {
             bindGrid(data);
             $scope.driver = {};
@@ -149,7 +258,7 @@ angular.module("myApp.controllers", [])
         });
       }  
       else{//Add new
-        $http.post('/api/drivers/save', $scope.driver).success(function(data) {
+        $http.post('/api/drivers/save', transformModel()).success(function(data) {
             bindGrid(data);
             $scope.driver = {};
             $scope.showModal=false;
