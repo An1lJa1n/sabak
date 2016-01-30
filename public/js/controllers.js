@@ -143,13 +143,20 @@ angular.module("myApp.controllers", [])
     $scope.nationalPermitExpiryPicker = {opened: false};
     $scope.insuranceExpiryPicker = {opened: false};
     $scope.professionalTaxExpiryPicker = {opened: false};
-
+    $scope.counterPermitExpiryPicker = {opened: false};
+    $scope.counterTaxExpiryPicker = {opened: false};
+    $scope.greenTaxExpiryPicker = {opened: false};
+    
     $scope.openExpiryPicker = function() {$scope.expiryPicker.opened = true;};
     $scope.openFitnessExpiryPicker = function() {$scope.fitnessExpiryPicker.opened = true;};
     $scope.openPermitExpiryPicker = function() {$scope.permitExpiryPicker.opened = true;};
     $scope.openNationalPermitExpiryPicker = function() {$scope.nationalPermitExpiryPicker.opened = true;};
     $scope.openInsuranceExpiryPicker = function() {$scope.insuranceExpiryPicker.opened = true;};
     $scope.openProfessionalTaxExpiryPicker = function() {$scope.professionalTaxExpiryPicker.opened = true;};
+    $scope.openCounterPermitExpiryPicker = function() {$scope.counterPermitExpiryPicker.opened = true;};
+    $scope.openCounterTaxExpiryPicker = function() {$scope.counterTaxExpiryPicker.opened = true;};
+    $scope.openGreenTaxExpiryPicker = function() {$scope.greenTaxExpiryPicker.opened = true;};
+    
 
     $scope.$watch('files', function () {
         $scope.upload($scope.files);
@@ -161,9 +168,9 @@ angular.module("myApp.controllers", [])
     });
     $scope.formatDate = function(value){
         if(!value) return "";
-        var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec");
+        var m_names = new Array("01", "02", "03", "04", "05", "06", "07", "08", "09","10", "11", "12");
         var d = new Date(value);
-        return (d.getDate() + "-" + m_names[d.getMonth()] + "-" + d.getFullYear());
+        return (d.getDate() + " " + m_names[d.getMonth()] + " " + d.getFullYear());
     };
     var dateDiff = function(value){
       var date1 = new Date(value);

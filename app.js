@@ -7,7 +7,37 @@ var express = require('express'),
   routes = require('./routes'),
   driversApi = require('./routes/api'),
   formsApi = require('./routes/formsApi'),
-  session = require('express-session');
+  session = require('express-session'),
+  fbInstanceForJob = require("firebase");
+var twilio = require('twilio'),
+client = twilio('AC544fe7786d619ac8e6c4cc76bdaa6aa9', '10806eada03a367712e6c8ea5739cc2b'),
+cronJob = require('cron').CronJob;
+
+var textJob = new cronJob( '00 10 * * *', function(){
+  var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
+  fb.authWithPassword({
+        email    : "info@sabak.in",password : "password"
+      }, function(error, authData) {
+        if (error) {
+        console.log("Login Failed!", error);
+      } else {
+          console.log("Login success!", error);
+          fb.child("vechiles").orderByChild("taxExpiry").endAt((new Date()).getTime()).once("value", function(data) {
+              var count=0;
+              if(data.val()){
+                for(var item in data.val()){count++;}
+              }
+              fb.unauth();
+              console.log("Record count!", count);
+              client.sendMessage( { to:'+919702579472', from:'+12016852518', body: "Tax for " + count + ' vechiles are going to expire today' }, function( err, data ) {
+                console.log(err);
+                console.log( data.body );
+              });
+          });     
+      }
+  });
+},  null, true);
+
 var app = module.exports = express.createServer();
 var sess;
 
