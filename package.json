@@ -12,7 +12,10 @@
     "jade": ">= 0.0.1",
     "ng-file-upload": "~11.2.2",
     "twilio": "~3.3.0-edge",
-    "cron": "~1.1.0"
+    "cron": "~1.1.0",
+    "multer": "~1.1.0",
+    "body-parser": "~1.14.2",
+    "fs": "0.0.2"
   },
   "engines": {
     "node": ">=0.10.17"

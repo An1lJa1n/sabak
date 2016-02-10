@@ -8,6 +8,10 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives','
         templateUrl: 'partials/index',
         controller: 'IndexCtrl'
       }).
+      when('/vehicalServices/:status/:field', {
+        templateUrl: 'partials/drivers',
+        controller: 'vehicalCtrl'
+      }).
       when('/vehicalServices', {
         templateUrl: 'partials/drivers',
         controller: 'vehicalCtrl'

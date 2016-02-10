@@ -113,7 +113,7 @@ modal(title="Add new Vehical", visible="showModal")
 				label(for="greenTaxExpiry") Green Tax Expiry
 				|<input style="display:inline;width:70%" id="greenTaxExpiry", type="text" class="form-control" uib-datepicker-popup ng-model="driver.greenTaxExpiry" is-open="greenTaxExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openGreenTaxExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
 			div(class="col-md-12")
-				|<div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">Drop pdfs or images here or click to upload</div><div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+				|<div ngf-drop ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" ngf-select="upload($files)">Drop pdfs or images here or click to upload</div><div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
 				|Files:<ul><li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li></ul>
 		div(class="row")
 			button(style="margin-left:15px" class="btn btn-default" ng-click="save()")
@@ -155,7 +155,7 @@ div(class= "row")
 					th
 					th
 			tbody
-				tr(ng-repeat="row in displayDrivers")
+				tr(ng-repeat="row in displayDrivers | filter:applyFilters")
 					td(style="padding:3px!important;vertical-align:middle!important;") {{row.vehicalNumber}}
 					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.taxExpiry)}}") {{formatDate(row.taxExpiry)}}
 					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.fitnessExpiry)}}") {{formatDate(row.fitnessExpiry)}}
@@ -177,3 +177,13 @@ div(class= "row")
 				tr
 					td(colspan="15", class="text-center")
 						div(st-pagination="", st-items-by-page="itemsByPage",st-displayed-pages="5")
+modal(title="Vehicle Deletion", visible="vehicleDelModal")
+	form(role="form")
+		div(class="row")
+			div(class="form-group col-md-12") 
+				label(for="vehicalNumberInfo") Are you sure you want to delete the record?
+				div(class="row")
+			button(style="margin-left:15px" class="btn btn-default" ng-click="yes(row)")
+				|Yes
+			button(style="margin-left:15px" class="btn btn-default" data-dismiss="modal")
+				|No

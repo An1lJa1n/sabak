@@ -132,7 +132,7 @@ angular.module("myApp.controllers", [])
   })
   .controller('appsCtrl', function($scope,$http) {
   })
-  .controller('vehicalCtrl',function($scope,$http,$filter,Upload, $timeout) {
+  .controller('vehicalCtrl',function($scope,$http,$filter,$routeParams, Upload, $timeout) {
     $scope.driver = {};
     $scope.drivers = [];
     $scope.log = '';
@@ -180,15 +180,11 @@ angular.module("myApp.controllers", [])
     };
 
     $scope.getColorCode = function(value){
-        var colors = ["red","orange","skyblue"];
         if(value){
           var days = dateDiff(value);
-          if(days<=10 &&  days>1)
-            return "blue";
-          if(days==1 || days==0)
-            return "orange";
-          if(days<0)
-            return "red";
+          if(days<=10 &&  days>=0) return "green";
+          if(days>=-30 && days<0) return "orange";
+          if(days>=-45 && days<-31) return "red";
         }
         return "";
     };
@@ -198,7 +194,7 @@ angular.module("myApp.controllers", [])
               var file = files[i];
               if (!file.$error) {
                 Upload.upload({
-                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                    url: '/api/upload',
                     data: {
                       file: file  
                     }
@@ -220,7 +216,11 @@ angular.module("myApp.controllers", [])
             }
         }
     };
-    $scope.filterStatuses = [{id:1,description: "Pending"},{id:2, description:"Overdue"},{id:3, description:"Expired"}];
+    $scope.filterStatuses = [{id:0,description: "Select Status.."},{id:1,description: "Pending"},{id:2, description:"Overdue"},{id:3, description:"Expired"}];
+    if($routeParams.status)
+      $scope.filterStatus = parseInt($routeParams.status);
+    else
+      $scope.filterStatus =0;
     $scope.filters = [
         {id:1, text:'Tax'},
         {id:2, text:'Fitness'},
@@ -229,6 +229,36 @@ angular.module("myApp.controllers", [])
         {id:5, text:'Insurance'},
         {id:6, text:'Prof. Tax'}
     ];
+    if($routeParams.field)
+      $scope.filters[parseInt($routeParams.field)].selected=true;   
+    var isStatusOk = function(value){
+        var days = dateDiff(value);
+        switch ($scope.filterStatus){
+          case 1:    
+            return days<=10 &&  days>=0;
+          case 2:
+            return days>=-30 && days<0;
+          case 3:
+            return days>=-45 && days<-31;
+          default: 
+            return false 
+        }
+    };
+    $scope.applyFilters = function(item){
+        if($scope.filterStatus == 0 || 
+            (!$scope.filters[0].selected && !$scope.filters[1].selected 
+              && !$scope.filters[2].selected && !$scope.filters[3].selected 
+              && !$scope.filters[4].selected && !$scope.filters[5].selected)
+        ) return true; 
+        
+        if($scope.filters[0].selected && isStatusOk(item["taxExpiry"])) return true;
+        if($scope.filters[1].selected && isStatusOk(item["fitnessExpiry"])) return true;
+        if($scope.filters[2].selected && isStatusOk(item["permitExpiry"])) return true;
+        if($scope.filters[3].selected && isStatusOk(item["nationalPermitExpiry"])) return true;
+        if($scope.filters[4].selected && isStatusOk(item["insuranceExpiry"])) return true;
+        if($scope.filters[5].selected && isStatusOk(item["professionalTaxExpiry"])) return true;
+        return false;
+    };
     $scope.showDetailModal=false;
     $scope.showModal = false;
     $scope.toggleModal = function(){
@@ -266,16 +296,25 @@ angular.module("myApp.controllers", [])
       }  
       else{//Add new
         $http.post('/api/drivers/save', transformModel()).success(function(data) {
-            bindGrid(data);
-            $scope.driver = {};
-            $scope.showModal=false;
+             if(data.error)
+                alert(data.error);
+            else{    
+              bindGrid(data);
+              $scope.driver = {};
+              $scope.showModal=false;
+            }
         });
       }
     };
     $scope.removeItem= function(row){
-      $http.delete('/api/drivers/' + row.key).
-        success(function(data) {
+      $scope.driver = row;
+      $scope.vehicleDelModal=true;
+    };
+    $scope.yes= function(){
+      $http.delete('/api/drivers/'+ $scope.driver.key).success(function(data) {
           bindGrid(data);
+          $scope.driver = {};
+          $scope.vehicleDelModal=false;
       });
     };
     var bindGrid =function(data){
@@ -315,9 +354,9 @@ angular.module("myApp.controllers", [])
       }  
       else{//Add new
         $http.post('/api/forms/save', $scope.form).success(function(data) {
-            bindGrid(data);
-            $scope.form = {};
-            $scope.showModal=false;
+              bindGrid(data);
+              $scope.form = {};
+              $scope.showModal=false;
         });
       }
     };
