@@ -133,6 +133,7 @@ angular.module("myApp.controllers", [])
   .controller('appsCtrl', function($scope,$http) {
   })
   .controller('vehicalCtrl',function($scope,$http,$filter,$routeParams, Upload, $timeout) {
+    $scope.displayDrivers = [];
     $scope.driver = {};
     $scope.drivers = [];
     $scope.log = '';
@@ -156,7 +157,6 @@ angular.module("myApp.controllers", [])
     $scope.openCounterPermitExpiryPicker = function() {$scope.counterPermitExpiryPicker.opened = true;};
     $scope.openCounterTaxExpiryPicker = function() {$scope.counterTaxExpiryPicker.opened = true;};
     $scope.openGreenTaxExpiryPicker = function() {$scope.greenTaxExpiryPicker.opened = true;};
-    
 
     $scope.$watch('files', function () {
         $scope.upload($scope.files);
@@ -191,7 +191,8 @@ angular.module("myApp.controllers", [])
     $scope.upload = function (files) {
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
-              var file = files[i];
+              $scope.files = files;
+              /*var file = files[i];
               if (!file.$error) {
                 Upload.upload({
                     url: '/api/upload',
@@ -212,7 +213,7 @@ angular.module("myApp.controllers", [])
                       '% ' + evt.config.data.file.name + '\n' + 
                       $scope.log;
                 });
-              }
+              }*/
             }
         }
     };
@@ -222,12 +223,12 @@ angular.module("myApp.controllers", [])
     else
       $scope.filterStatus =0;
     $scope.filters = [
-        {id:1, text:'Tax'},
-        {id:2, text:'Fitness'},
-        {id:3, text:'Permit'},
-        {id:4, text:'National Permit'},
-        {id:5, text:'Insurance'},
-        {id:6, text:'Prof. Tax'}
+        {id:1, text:'Tax', predicate: "taxExpiry"},
+        {id:2, text:'Fitness', predicate: "fitnessExpiry"},
+        {id:3, text:'Permit', predicate: "permitExpiry"},
+        {id:4, text:'National Permit', predicate: "nationalPermitExpiry"},
+        {id:5, text:'Insurance', predicate: "insuranceExpiry"},
+        {id:6, text:'Prof. Tax',predicate: "professionalTaxExpiry"}
     ];
     if($routeParams.field)
       $scope.filters[parseInt($routeParams.field)].selected=true;   
@@ -243,6 +244,14 @@ angular.module("myApp.controllers", [])
           default: 
             return false 
         }
+    };
+    
+    $scope.filterChanged = function(){
+       $scope.stSafeSrc= []; 
+       angular.forEach($scope.drivers, function(value, key) {
+          if($scope.applyFilters(value))
+            $scope.stSafeSrc.push(value);
+      });
     };
     $scope.applyFilters = function(item){
         if($scope.filterStatus == 0 || 
@@ -284,27 +293,55 @@ angular.module("myApp.controllers", [])
         return $scope.driver;
     };
     $scope.save  = function(){
-      if($scope.driver.key){ //update
-        var key = $scope.driver.key;
-        delete $scope.driver.key;
-        $http.put('/api/drivers/' + key, transformModel()).
-        success(function(data) {
-            bindGrid(data);
-            $scope.driver = {};
-            $scope.showModal=false;
-        });
-      }  
-      else{//Add new
-        $http.post('/api/drivers/save', transformModel()).success(function(data) {
-             if(data.error)
-                alert(data.error);
-            else{    
-              bindGrid(data);
-              $scope.driver = {};
-              $scope.showModal=false;
-            }
-        });
-      }
+       var dataSaveFn= function(){
+          if($scope.driver.key){ //update
+            var key = $scope.driver.key;
+            delete $scope.driver.key;
+            $http.put('/api/drivers/' + key, transformModel()).
+            success(function(data) {
+                bindGrid(data);
+                $scope.driver = {};
+                $scope.showModal=false;
+            });
+          }  
+          else{//Add new
+            $http.post('/api/drivers/save', transformModel()).success(function(data) {
+                 if(data.error)
+                    alert(data.error);
+                else{    
+                  bindGrid(data);
+                  $scope.driver = {};
+                  $scope.showModal=false;
+                }
+            });
+          }
+       };
+       if (this.entryForm.file.$valid && this.entryForm.file.$modelValue) { //check if from is valid
+               var file = this.entryForm.file.$modelValue;
+               file.prefix = $scope.driver.vehicalNumber;
+               file.datetimestamp =  Date.now();
+               Upload.upload({
+                    url: 'http://localhost:3000/api/upload',
+                    data: {
+                      file: file
+                    }
+                }).then(function (resp) {
+                    $timeout(function() {
+                        $scope.log = 'file: ' +
+                        resp.config.data.file.name +
+                        ', Response: ' + JSON.stringify(resp.data) +
+                        '\n' + $scope.log;
+                        $scope.driver.attachment = resp.config.data.file.name;
+                        dataSaveFn();
+                    });
+                }, null, function (evt) {
+                    var progressPercentage = parseInt(100.0 *
+                        evt.loaded / evt.total);
+                    $scope.log = 'progress: ' + progressPercentage + 
+                      '% ' + evt.config.data.file.name + '\n' + 
+                      $scope.log;
+                });
+       }
     };
     $scope.removeItem= function(row){
       $scope.driver = row;
@@ -324,7 +361,9 @@ angular.module("myApp.controllers", [])
         item.key =key;
         $scope.drivers.push(item); 
       }
+      $scope.stSafeSrc = [].concat($scope.drivers);
     };
+
     $http.get('/api/drivers/getList').
       success(function(data, status, headers, config) {
          bindGrid(data);
