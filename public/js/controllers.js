@@ -341,7 +341,8 @@ angular.module("myApp.controllers", [])
                       '% ' + evt.config.data.file.name + '\n' + 
                       $scope.log;
                 });
-       }
+       }else
+          dataSaveFn();
     };
     $scope.removeItem= function(row){
       $scope.driver = row;
