@@ -273,7 +273,9 @@ angular.module("myApp.controllers", [])
     ];
     if($routeParams.field)
       $scope.filters[parseInt($routeParams.field)].selected=true;   
-    
+    $scope.isDefaultSorted = function(index){
+      return index==$routeParams.field;
+    };
     var isStatusOk = function(value){
         var days = dateDiff(value);
         switch ($scope.filterStatus){
