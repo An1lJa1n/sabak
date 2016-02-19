@@ -83,8 +83,8 @@ app.post('/api/drivers/save', driversApi.save);
 app.put('/api/drivers/:id', driversApi.update);
 app.delete('/api/drivers/:id', driversApi.delete);
 app.get('/api/drivers/getExpiredRecord/:field', driversApi.getExpiredRecord);
-app.get('/api/drivers/getDueRecord/:field', driversApi.getExpiredRecord);
-app.get('/api/drivers/getPendingRecord/:field', driversApi.getExpiredRecord);
+app.get('/api/drivers/getDueRecord/:field', driversApi.getDueRecord);
+app.get('/api/drivers/getOverdueRecord/:field', driversApi.getOverdueRecord);
 
 app.get('/api/forms/getList', formsApi.getList);
 app.post('/api/forms/save', formsApi.save);

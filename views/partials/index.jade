@@ -1,31 +1,38 @@
 div
 	div(class="row")
 		div(class="col-md-2")
-			img(src="images/due.png", height="128px")
-		div(class="col-md-10",style="color:blue;padding-top:10px;font-size:15px;font-weight:bold")
-			div <a ng-href="/vehicalServices/2/0">Tax due for {{notifications.taxExpiry_Due}} vehicles.</a>
-			div <a ng-href="/vehicalServices/2/1">Fitness due for {{notifications.fitnessExpiry_Due}} vehicles.</a>
-			div <a ng-href="/vehicalServices/2/2">Permit due for {{notifications.permitExpiry_Due}} vehicles.</a>
-			div <a ng-href="/vehicalServices/2/3">National Permit due for {{notifications.nationalPermitExpiry_Due}} vehicles.</a>
-			div <a ng-href="/vehicalServices/2/4">Insurane due for {{notifications.insuranceExpiry_Due}} vehicles.</a>
-			div <a ng-href="/vehicalServices/2/5">Professional Tax due for {{notifications.professionalTaxExpiry_Due}} vehicles.</a>
+			img(src="images/due.png", height="150px")
+		div(class="col-md-10",style="padding-top:10px;font-size:13px;font-weight:bold")
+			div <a ng-href="/vehicalServices/1/0">Tax due for {{notifications.taxExpiry_Due}} vehicles.</a>
+			div <a ng-href="/vehicalServices/1/1">Fitness due for {{notifications.fitnessExpiry_Due}} vehicles.</a>
+			div <a ng-href="/vehicalServices/1/2">Permit due for {{notifications.permitExpiry_Due}} vehicles.</a>
+			div <a ng-href="/vehicalServices/1/3">National Permit due for {{notifications.nationalPermitExpiry_Due}} vehicles.</a>
+			div <a ng-href="/vehicalServices/1/4">Insurane due for {{notifications.insuranceExpiry_Due}} vehicles.</a>
+			div <a ng-href="/vehicalServices/1/5">Professional Tax due for {{notifications.professionalTaxExpiry_Due}} vehicles.</a>
+			div Counter Tax due for {{notifications.counterTaxExpiry_Due}} vehicles.
+			div Counter Permit due for {{notifications.counterPermitExpiry_Due}} vehicles.
 	div(class="row")
 		div(class="col-md-2")
-			img(src="images/pending.png", style="padding-left:10px", height="110px")		
-		div(class="col-md-10", style="color:orange;padding-top:10px;font-size:15px;font-weight:bold")
-			div <a ng-href="/vehicalServices/1/0">Tax pending for {{notifications.taxExpiry_Pending}} vehicles.</a>
-			div <a ng-href="/vehicalServices/1/1">Fitness pending for {{notifications.fitnessExpiry_Pending}} vehicles.</a>
-			div <a ng-href="/vehicalServices/1/2">Permit pending for {{notifications.permitExpiry_Pending}} vehicles.</a>
-			div <a ng-href="/vehicalServices/1/3">National Permit pending for {{notifications.nationalPermitExpiry_Pending}} vehicles.</a>
-			div <a ng-href="/vehicalServices/1/4">Insurane pending for {{notifications.insuranceExpiry_Pending}} vehicles.</a>
-			div <a ng-href="/vehicalServices/1/5">Professional Tax pending for {{notifications.professionalTaxExpiry_Pending}} vehicles.</a>
+			img(src="images/expired.png", height="150px")
+		div(class="col-md-10",style="padding-top:10px;font-size:13px;font-weight:bold")
+			div <a ng-href="/vehicalServices/2/0">Tax expired for {{notifications.taxExpiry_Expired}} vehicles.</a>
+			div <a ng-href="/vehicalServices/2/1">Fitness expired for {{notifications.fitnessExpiry_Expired}} vehicles.</a>
+			div <a ng-href="/vehicalServices/2/2">Permit expired for {{notifications.permitExpiry_Expired}} vehicles.</a>
+			div <a ng-href="/vehicalServices/2/3">National Permit expired for {{notifications.nationalPermitExpiry_Expired}} vehicles.</a>
+			div <a ng-href="/vehicalServices/2/4">Insurane expired for {{notifications.insuranceExpiry_Expired}} vehicles.</a>
+			div <a ng-href="/vehicalServices/2/5">Professional Tax expired for {{notifications.professionalTaxExpiry_Expired}} vehicles.</a>
+			div Counter Tax expired for {{notifications.counterTaxExpiry_Expired}} vehicles.
+			div Counter Permit expired for {{notifications.counterPermitExpiry_Expired}} vehicles.
 	div(class="row")
 		div(class="col-md-2")
-			img(src="images/expired.png", height="128px")
-		div(class="col-md-10",style="color:red;padding-top:10px;font-size:15px;font-weight:bold")
-			div <a ng-href="/vehicalServices/3/0">Tax expired for {{notifications.taxExpiry_Expired}} vehicles.</a>
-			div <a ng-href="/vehicalServices/3/1">Fitness expired for {{notifications.fitnessExpiry_Expired}} vehicles.</a>
-			div <a ng-href="/vehicalServices/3/2">Permit expired for {{notifications.permitExpiry_Expired}} vehicles.</a>
-			div <a ng-href="/vehicalServices/3/3">National Permit expired for {{notifications.nationalPermitExpiry_Expired}} vehicles.</a>
-			div <a ng-href="/vehicalServices/3/4">Insurane expired for {{notifications.insuranceExpiry_Expired}} vehicles.</a>
-			div <a ng-href="/vehicalServices/3/5">Professional Tax expired for {{notifications.professionalTaxExpiry_Expired}} vehicles.</a>
+			img(src="images/pending.png", style="padding-left:10px", height="130px")		
+		div(class="col-md-10", style="padding-top:10px;font-size:13px;font-weight:bold")
+			div <a ng-href="/vehicalServices/3/0">Tax overdue for {{notifications.taxExpiry_Overdue}} vehicles.</a>
+			div <a ng-href="/vehicalServices/3/1">Fitness overdue for {{notifications.fitnessExpiry_Overdue}} vehicles.</a>
+			div <a ng-href="/vehicalServices/3/2">Permit overdue for {{notifications.permitExpiry_Overdue}} vehicles.</a>
+			div <a ng-href="/vehicalServices/3/3">National Permit overdue for {{notifications.nationalPermitExpiry_Overdue}} vehicles.</a>
+			div <a ng-href="/vehicalServices/3/4">Insurane overdue for {{notifications.insuranceExpiry_Overdue}} vehicles.</a>
+			div <a ng-href="/vehicalServices/3/5">Professional Tax overdue for {{notifications.professionalTaxExpiry_Overdue}} vehicles.</a>
+			div Counter Tax overdue for {{notifications.counterTaxExpiry_Overdue}} vehicles.
+			div Counter Permit overdue for {{notifications.counterPermitExpiry_Overdue}} vehicles.
+	
