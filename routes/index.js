@@ -10,8 +10,13 @@ exports.login = function(req, res){
 				console.log("Login Failed!", error);
 			} else {
 				console.log("authenticated");
-				req.session.userProile = authData;
-				res.render('index');	
+				console.log(authData.uid);
+				firebaseRef.child("users").child(authData.uid).once("value", function(data) {
+  					req.session.userProile = data.val();
+  					console.log(data.val());
+  					res.render('index');	
+				});
+				//req.session.userProile = authData;	
 			}
 		});	
 	}else
