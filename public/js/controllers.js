@@ -365,7 +365,7 @@ angular.module("myApp.controllers", [])
                file.prefix = $scope.driver.vehicalNumber;
                file.datetimestamp =  Date.now();
                Upload.upload({
-                    url: 'http://localhost:3000/api/upload',
+                    url: '/api/upload',
                     data: {
                       file: file
                     }
