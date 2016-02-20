@@ -173,7 +173,7 @@ angular.module("myApp.controllers", [])
   })
   .controller('appsCtrl', function($scope,$http) {
   })
-  .controller('vehicalCtrl',function($scope,$http,$filter,$routeParams, Upload, $timeout) {
+  .controller('vehicalCtrl',function($scope,$http,$filter,$routeParams, Upload, $timeout, FileSaver) {
     $scope.displayDrivers = [];
     $scope.driver = {};
     $scope.drivers = [];
@@ -414,6 +414,16 @@ angular.module("myApp.controllers", [])
          bindGrid(data);
          $scope.filterChanged();
     });
+    $scope.downloadAttachment = function(fileName){
+        $http.post('/api/download', {filename: $scope.driver.attachment},{responseType:'blob'}).then(function(response) {
+          var blob = new Blob([response.data]);
+          var fileName = response.headers('content-disposition');
+          FileSaver.saveAs(blob, fileName);
+        }, function(response) {
+          console.log('Download error');
+          console.log(response);
+        });
+    };  
   }).controller('formsCtrl',function($scope,$http,$filter) {
     $scope.form = {};
     $scope.forms = [];

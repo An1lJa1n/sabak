@@ -112,10 +112,12 @@ modal(title="Add new Vehical", visible="showModal")
 			div(class="form-group col-md-3")
 				label(for="greenTaxExpiry") Green Tax Expiry
 				|<input style="display:inline;width:70%" id="greenTaxExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.greenTaxExpiry" is-open="greenTaxExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openGreenTaxExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
-			div(class="col-md-9")
+			div(class="col-md-8")
 				|<div ngf-max-size="20MB" ngf-drop ng-model="file" class="drop-box" name= "file" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" ngf-select ngf-pattern="'image/*,application/pdf'">Drop pdfs or images here or click to upload</div><div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>File:<ul><li style="font:smaller">{{file.name}} {{file.$error}} {{file.$errorParam}}</li></ul><p>{{progress}}</p>
-			div(class="col-md-3")
-				label()<a href="/uploads/{{driver.attachment}}">{{driver.attachment}}</a>
+			div(class="col-md-4")
+				div(ng-show="driver.attachment!=undefned")
+					label() {{driver.attachment}}
+					span(class="btn btn-primary", ng-click="downloadAttachment('{{driver.attachment}}')") Download
 		div(class="row")
 			button(type="submit", style="margin-left:15px", class="btn btn-default", ng-click="save()")
 				|Save

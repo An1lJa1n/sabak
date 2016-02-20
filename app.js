@@ -1,6 +1,10 @@
 var express = require('express'),routes = require('./routes'),driversApi = require('./routes/api'),formsApi = require('./routes/formsApi'),
   session = require('express-session'),fbInstanceForJob = require("firebase"), bodyParser = require('body-parser'),multer = require('multer');
 
+var path = require('path');
+var mime = require('mime');
+var fs= require('fs');
+
 var twilio = require('twilio'), client = twilio('AC544fe7786d619ac8e6c4cc76bdaa6aa9', '10806eada03a367712e6c8ea5739cc2b'), cronJob = require('cron').CronJob;
 
 var textJob = new cronJob( '51 10 * * *', function(){
@@ -98,6 +102,21 @@ app.post('/api/upload', function(req, res) {
             }
              res.json({error_code:0,err_desc:null});
         })
+});
+app.post('/api/download', function(req, res){
+  console.log(req.body.filename);
+  var filePath = path.join(__dirname, 'uploads', req.body.filename);
+  console.log(filePath);
+  var filename = path.basename(filePath);
+  var mimetype = mime.lookup(filePath);
+  console.log(mimetype);
+  
+  var stat = fs.statSync(filePath);
+  var fileToSend = fs.readFileSync(filePath);
+  res.setHeader('Content-Type', mimetype);
+  res.setHeader('Content-Length', stat.size);
+  res.setHeader('Content-Disposition', filename);
+  res.send(fileToSend);
 });
 app.get('*', routes.index);
 app.listen(process.env.PORT || 3000, function(){
