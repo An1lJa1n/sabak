@@ -5,26 +5,98 @@ var path = require('path');
 var mime = require('mime');
 var fs= require('fs');
 
+var nodemailer = require("nodemailer");
+var smtpTransport = require('nodemailer-smtp-transport');
+var request = require('request');
 var twilio = require('twilio'), client = twilio('AC544fe7786d619ac8e6c4cc76bdaa6aa9', '10806eada03a367712e6c8ea5739cc2b'), cronJob = require('cron').CronJob;
 
-var textJob = new cronJob( '51 10 * * *', function(){
-  var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
+var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
+var smtpTransport = nodemailer.createTransport(smtpTransport({
+   service: "Gmail",
+   auth: {
+       user: "info@sabak.in",
+       pass: "ABaaush@123"
+   }
+}));
+var sendEmail = function(){
   fb.authWithPassword({
         email    : "info@sabak.in",password : "password"
       }, function(error, authData) {
         if (error) console.log("Login Failed!", error);
         else {
-          fb.child("vechiles").orderByChild("taxExpiry").endAt((new Date()).getTime()).once("value", function(data) {
-              var count=0;
-              if(data.val())
-                for(var item in data.val()){count++;}
-              fb.unauth();
-              var numbers = ['+919702579472', '+918898889599','+919867333206','+919769770103'];
-              for( var i = 0; i < numbers.length; i++ ) {
-                console.log(numbers[i]);
-                client.sendMessage( { to:numbers[i], from:'+12016852518', body: "Tax for " + count + ' vechiles are going to expire today' }, function( err, data ) {console.log(err);});
+          fb.child("users").once("value",function(users){
+              var usersList = users.val();
+              var usersArr= [];
+              for(var user in usersList){
+                if(usersList[user].isEmail){
+                  (function(email) {
+                    fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
+                        var vechiles = vechilesSS.val();
+                        fb.unauth();
+                        smtpTransport.sendMail({from: "info@sabak.in", to: email, subject: "Daily Expiry Report", text: getMessageBody(vechiles)}, function(error, response){});
+                        console.log("email Sent to " + email);  
+                    });
+                  })(usersList[user].email);
+                }                 
               }
-          });     
+          });
+      }
+  });  
+};
+
+var sendText = function(to, msg){
+    var url = "http://api.textlocal.in/send/?apiKey=BwGY3tTziYw-t2fXMRkoH9ra8g1mBY4eclj1jELBk3&numbers=" + to + "&message=" + msg + "&sender=TXTLCL"; 
+    request(url, function (error, response, body) {});
+};
+
+var emailJob = new cronJob( '39 10 * * *', function(){
+    sendEmail();
+},null, true); 
+var getMessageBody = function(vechiles){
+    var minDate = Date.now() - 15*24*60*60*1000;
+    var maxDate = Date.now() - 1*24*60*60*1000;
+    var tax=0, counterPermit=0,fitness=0,greenTax=0,insurance=0,national=0,permit=0,professionalTax=0;
+    var hasExpired = function(value){
+      if(!value) return false;
+      return (new Date(value)).getTime()> minDate && (new Date(value)).getTime() < maxDate;
+    };
+    for(key in vechiles){
+        if(hasExpired(vechiles[key].taxExpiry)) tax++;
+        if(hasExpired(vechiles[key].counterPermitExpiry)) counterPermit++;
+        if(hasExpired(vechiles[key].fitnessExpiry)) fitness++;
+        if(hasExpired(vechiles[key].greenTaxExpiry)) greenTax++;
+        if(hasExpired(vechiles[key].insuranceExpiry)) insurance++;
+        if(hasExpired(vechiles[key].nationalPermitExpiry)) national++;
+        if(hasExpired(vechiles[key].permitExpiry)) permit++;
+        if(hasExpired(vechiles[key].professionalTaxExpiry)) professionalTax++;
+    }
+    var message = "Expiry summary as of today is: Tax(" + tax +"), Counter Permit(" + counterPermit +"), Fitness(" + fitness + "),";
+    message = message + "Green Tax(" + greenTax +"), Insurance(" + insurance +"), National Permit(" + national + "),";
+    message = message + "Permit(" + greenTax +"), Professional Tax(" + professionalTax +")";
+    return message;
+}; 
+
+var textJob = new cronJob( '38 10 * * *', function(){
+  fb.authWithPassword({
+        email    : "info@sabak.in",password : "password"
+      }, function(error, authData) {
+        if (error) console.log("Login Failed!", error);
+        else {
+          fb.child("users").once("value",function(users){
+              var usersList = users.val();
+              for(var user in usersList){
+                 if(usersList[user].isSMS){
+                  (function(mobile) {
+                    fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
+                        var vechiles = vechilesSS.val();
+                        fb.unauth();
+                        sendText(mobile,getMessageBody(vechiles));
+                        console.log("SMS Sent to " + mobile);  
+                    });
+                  })(usersList[user].mobile);
+                 }                 
+              }
+          });
       }
   });
 },  null, true);
