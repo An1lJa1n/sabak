@@ -219,7 +219,46 @@ angular.module("myApp.controllers", [])
       var timeDiff = date1.getTime()-date2.getTime();
       return Math.ceil(timeDiff / (1000 * 3600 * 24)); 
     };
+    $scope.MyFiles=[];
 
+    $scope.uploadCSV=function(e,files){
+        var reader=new FileReader();
+        reader.onload=function(e){
+            var string=reader.result;
+            var obj=$filter('csvToObj')(string);
+            for(var i=0;i<obj.length;i++){
+                $scope.driver= obj[i];
+                $http.post('/api/drivers/save', transformModel()).success(function(data) {
+                     if(data.error)
+                        alert(data.error);
+                    else{    
+                      bindGrid(data);
+                    }
+                });
+            }
+        }
+        reader.readAsText(files[0]);
+    };
+    
+    $scope.downloadCSV = function(){
+        alasql.fn.formatDate = function(value) {
+          return $scope.formatDate(value);
+        };
+        var mystyle = {
+          headers:true, 
+          column: {style:{Font:{Bold:"1"}}},
+          rows: {1:{style:{Font:{Color:"#FF0077"}}}},
+          cells: {1:{1:{
+            style: {Font:{Color:"#00FFFF"}}
+          }}}
+        };
+        alasql('SELECT vehicalNumber,chasis,\
+          engineDetails,owner,mobile,address,tax,formatDate(taxExpiry) AS taxExpiry,\
+          formatDate(fitnessExpiry) AS fitnessExpiry,formatDate(permitExpiry) AS permitExpiry,formatDate(nationalPermitExpiry) AS nationalPermitExpiry,\
+          formatDate(insuranceExpiry) AS insuranceExpiry,professionalTax,formatDate(professionalTaxExpiry) AS professionalTaxExpiry,\
+          formatDate(greenTaxExpiry) AS greenTaxExpiry,formatDate(counterTaxExpiry) AS counterTaxExpiry,formatDate(counterPermitExpiry) AS counterPermitExpiry \
+          INTO XLSXML("sabak.xls",?) FROM ?',[mystyle,$scope.drivers]);
+    };
     $scope.getColorCode = function(value){
         if(value){
           var days = dateDiff(value);
@@ -334,6 +373,10 @@ angular.module("myApp.controllers", [])
         $scope.driver.nationalPermitExpiry= $scope.driver.nationalPermitExpiry?(new Date($scope.driver.nationalPermitExpiry)).getTime():null;
         $scope.driver.insuranceExpiry= $scope.driver.insuranceExpiry?(new Date($scope.driver.insuranceExpiry)).getTime():null;
         $scope.driver.professionalTaxExpiry= $scope.driver.professionalTaxExpiry?(new Date($scope.driver.professionalTaxExpiry)).getTime():null;
+        $scope.driver.greenTaxExpiry= $scope.driver.greenTaxExpiry?(new Date($scope.driver.greenTaxExpiry)).getTime():null;
+        $scope.driver.counterTaxExpiry= $scope.driver.counterTaxExpiry?(new Date($scope.driver.counterTaxExpiry)).getTime():null;
+        $scope.driver.counterPermitExpiry= $scope.driver.counterPermitExpiry?(new Date($scope.driver.counterPermitExpiry)).getTime():null;
+
         return $scope.driver;
     };
     $scope.save  = function(){

@@ -14,8 +14,8 @@ var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
 var smtpTransport = nodemailer.createTransport(smtpTransport({
    service: "Gmail",
    auth: {
-       user: "info@sabak.in",
-       pass: "ABaaush@123"
+       user: "cruelg000gle@gmail.in",
+       pass: "J@1n@n1l"
    }
 }));
 var sendEmail = function(){
@@ -49,7 +49,7 @@ var sendText = function(to, msg){
     request(url, function (error, response, body) {});
 };
 
-var emailJob = new cronJob( '39 10 * * *', function(){
+var emailJob = new cronJob( '28 12 * * *', function(){
     sendEmail();
 },null, true); 
 var getMessageBody = function(vechiles){
@@ -76,7 +76,7 @@ var getMessageBody = function(vechiles){
     return message;
 }; 
 
-var textJob = new cronJob( '38 10 * * *', function(){
+var textJob = new cronJob( '29 12 * * *', function(){
   fb.authWithPassword({
         email    : "info@sabak.in",password : "password"
       }, function(error, authData) {

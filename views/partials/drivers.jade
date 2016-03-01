@@ -139,12 +139,19 @@ div(class= "row")
 				tr
 					th(style="padding:3px!important;",colspan="2")
 						input(st-search="", class="form-control", placeholder="Search ...", type="text")
-					th(style="padding:3px!important;",colspan="9")
+					th(style="padding:3px!important;",colspan="7")
 						div(class="controls")
 							select(style="width: 150px;display: inline;margin-right:30px" class= "form-control", ng-model="filterStatus", ng-options="value.id as value.description for value in filterStatuses", ng-change="filterChanged()")
 							label(ng-repeat="item in filters" style="padding-right: 10px")
 								input(type="checkbox", style="display:inline",  ng-model="item.selected" ng-change="filterChanged()") 
 								|{{item.text}}
+					th
+						button(style= "display:inline;", type="button", ng-click="downloadCSV()", class="btn btn-sm btn-primary")
+								i(class="glyphicon glyphicon-download-alt")
+					th
+						input(type="file",class="btn btn-sm btn-primary", id= "fileUpload" style="display:none", file-change="uploadCSV($event,files)", ng-model="MyFiles")
+						button(style= "display:inline;", type="button", onclick="document.getElementById('fileUpload').click()", class="btn btn-sm btn-primary")
+							i(class="glyphicon glyphicon-upload")
 				tr
 					th(style="padding:3px!important;",st-sort="vehicalNumber") Vehical #
 					th(style="padding:3px!important;",st-sort="taxExpiry",st-sort-default="{{isDefaultSorted(0)}}") Tax

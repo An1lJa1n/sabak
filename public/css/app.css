@@ -92,3 +92,12 @@ fieldset {
 .dragover {
     border: 5px dashed blue;
 }
+.expired {
+  background-color: "orange";
+}
+.due {
+  background-color: "green"; 
+}
+.overdue {
+  background-color: "red";
+}
