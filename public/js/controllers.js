@@ -392,11 +392,13 @@ angular.module("myApp.controllers", [])
             });
           }  
           else{//Add new
+            var item = transformModel();
             $http.post('/api/drivers/save', transformModel()).success(function(data) {
                  if(data.error)
                     alert(data.error);
                 else{    
-                  bindGrid(data);
+                  $scope.drivers.push(item);
+                  $scope.stSafeSrc.push(item);
                   $scope.driver = {};
                   $scope.showModal=false;
                 }

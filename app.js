@@ -14,7 +14,7 @@ var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
 var smtpTransport = nodemailer.createTransport(smtpTransport({
    service: "Gmail",
    auth: {
-       user: "cruelg000gle@gmail.in",
+       user: "cruelg000gle@gmail.com",
        pass: "J@1n@n1l"
    }
 }));
@@ -32,8 +32,9 @@ var sendEmail = function(){
                   (function(email) {
                     fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
                         var vechiles = vechilesSS.val();
-                        fb.unauth();
-                        smtpTransport.sendMail({from: "info@sabak.in", to: email, subject: "Daily Expiry Report", text: getMessageBody(vechiles)}, function(error, response){});
+                        smtpTransport.sendMail({from: "cruelg000gle@gmail.com", to: email, subject: "Daily Expiry Report", text: getMessageBody(vechiles)}, function(error, response){
+                          fb.child("clients").child(usersList[user].ClientCode).child("error").set({message: error?error.toString():"success"});
+                        });
                         console.log("email Sent to " + email);  
                     });
                   })(usersList[user].email);
@@ -49,7 +50,7 @@ var sendText = function(to, msg){
     request(url, function (error, response, body) {});
 };
 
-var emailJob = new cronJob( '28 12 * * *', function(){
+var emailJob = new cronJob( '53 08 * * *', function(){
     sendEmail();
 },null, true); 
 var getMessageBody = function(vechiles){
@@ -89,7 +90,6 @@ var textJob = new cronJob( '29 12 * * *', function(){
                   (function(mobile) {
                     fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
                         var vechiles = vechilesSS.val();
-                        fb.unauth();
                         sendText(mobile,getMessageBody(vechiles));
                         console.log("SMS Sent to " + mobile);  
                     });
