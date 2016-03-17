@@ -137,9 +137,9 @@ div(class= "row")
 		table(st-table="displayVehicals",st-safe-src="stSafeSrc", class="table table-striped")
 			thead
 				tr
-					th(style="padding:3px!important;",colspan="2")
+					th(style="padding:3px!important;")
 						input(st-search="", class="form-control", placeholder="Search ...", type="text")
-					th(style="padding:3px!important;",colspan="7")
+					th(style="padding:3px!important;",colspan="8")
 						div(class="controls")
 							select(style="width: 150px;display: inline;margin-right:30px" class= "form-control", ng-model="filterStatus", ng-options="value.id as value.description for value in filterStatuses", ng-change="filterChanged()")
 							label(ng-repeat="item in filters" style="padding-right: 10px")

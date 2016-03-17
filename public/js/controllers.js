@@ -1,11 +1,3 @@
-
-/*taxExpiry Tax Expiry
-passingExpiry Passing Expiry
-permitExpiry Permit Expiry
-licenseExpiry_Transport License Expiry (Transport)
-licenseExpiry_NonTransport License Expiry (Non-Transport) 
-insuranceExpiry Insurance Expiry*/
-
 angular.module("myApp.controllers", [])
 .controller("IndexCtrl", function ($rootScope, $scope, $http) {
     $scope.notifications ={};
@@ -50,7 +42,6 @@ angular.module("myApp.controllers", [])
       success(function(data, status, headers, config) {
         $scope.notifications["fitnessExpiry_Overdue"] = getRecordCount(data);
     });
-
 
     $http.get('/api/drivers/getExpiredRecord/permitExpiry').
       success(function(data, status, headers, config) {
@@ -128,7 +119,20 @@ angular.module("myApp.controllers", [])
     $http.get('/api/drivers/getOverdueRecord/counterPermitExpiry').
       success(function(data, status, headers, config) {
         $scope.notifications["counterPermitExpiry_Overdue"] = getRecordCount(data);
-    });  
+    });
+
+    $http.get('/api/drivers/getExpiredRecord/greenTaxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["greenTaxExpiry_Expired"] = getRecordCount(data);
+    }); 
+    $http.get('/api/drivers/getDueRecord/greenTaxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["greenTaxExpiry_Due"] = getRecordCount(data);
+    });
+    $http.get('/api/drivers/getOverdueRecord/greenTaxExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["greenTaxExpiry_Overdue"] = getRecordCount(data);
+    });          
 
 }).controller('menuCtrl', function($scope,$http,$window) {
         $scope.menu = {
@@ -257,14 +261,14 @@ angular.module("myApp.controllers", [])
           formatDate(fitnessExpiry) AS fitnessExpiry,formatDate(permitExpiry) AS permitExpiry,formatDate(nationalPermitExpiry) AS nationalPermitExpiry,\
           formatDate(insuranceExpiry) AS insuranceExpiry,professionalTax,formatDate(professionalTaxExpiry) AS professionalTaxExpiry,\
           formatDate(greenTaxExpiry) AS greenTaxExpiry,formatDate(counterTaxExpiry) AS counterTaxExpiry,formatDate(counterPermitExpiry) AS counterPermitExpiry \
-          INTO XLSXML("sabak.xls",?) FROM ?',[mystyle,$scope.drivers]);
+          INTO XLSXML("sabak.xls",?) FROM ?',[mystyle,$scope.stSafeSrc]);
     };
     $scope.getColorCode = function(value){
         if(value){
           var days = dateDiff(value);
-          if(days<=30 &&  days>=0) return "green";
-          if(days>=-15 && days<0) return "orange";
-          if(days>=-60 && days<-16) return "red";
+          if(days<=30 &&  days>=0) return "#53D84E";
+          if(days>=-15 && days<0) return "#F78C2D";
+          if(days>=-60 && days<-16) return "#EE3642";
         }
         return "";
     };
@@ -308,7 +312,8 @@ angular.module("myApp.controllers", [])
         {id:3, text:'Permit', predicate: "permitExpiry"},
         {id:4, text:'National Permit', predicate: "nationalPermitExpiry"},
         {id:5, text:'Insurance', predicate: "insuranceExpiry"},
-        {id:6, text:'Prof. Tax',predicate: "professionalTaxExpiry"}
+        {id:6, text:'Prof.',predicate: "professionalTaxExpiry"},
+        {id:7, text:'Green',predicate: "greenTaxExpiry"}
     ];
     if($routeParams.field)
       $scope.filters[parseInt($routeParams.field)].selected=true;   
@@ -340,7 +345,7 @@ angular.module("myApp.controllers", [])
         if($scope.filterStatus == 0 || 
             (!$scope.filters[0].selected && !$scope.filters[1].selected 
               && !$scope.filters[2].selected && !$scope.filters[3].selected 
-              && !$scope.filters[4].selected && !$scope.filters[5].selected)
+              && !$scope.filters[4].selected && !$scope.filters[5].selected && !$scope.filters[6].selected)
         ) return true; 
         
         if($scope.filters[0].selected && isStatusOk(item["taxExpiry"])) return true;
@@ -349,6 +354,7 @@ angular.module("myApp.controllers", [])
         if($scope.filters[3].selected && isStatusOk(item["nationalPermitExpiry"])) return true;
         if($scope.filters[4].selected && isStatusOk(item["insuranceExpiry"])) return true;
         if($scope.filters[5].selected && isStatusOk(item["professionalTaxExpiry"])) return true;
+        if($scope.filters[6].selected && isStatusOk(item["greenTaxExpiry"])) return true;
         return false;
     };
     $scope.showDetailModal=false;
@@ -386,7 +392,7 @@ angular.module("myApp.controllers", [])
             delete $scope.driver.key;
             $http.put('/api/drivers/' + key, transformModel()).
             success(function(data) {
-                bindGrid(data);
+                //bindGrid(data);
                 $scope.driver = {};
                 $scope.showModal=false;
             });
