@@ -1,0 +1,207 @@
+modal(title="Vehical Details", visible="showDetailModal")
+	form(role="form")
+		div(class="row")
+			div(class="form-group col-md-2") 
+				label(for="vehicalNumberInfo") Vehical number
+				div(id="vehicalNumberInfo") {{driver.vehicalNumber}}
+			div(class="form-group col-md-2")
+				label(for="chasisInfo") Chasis Number
+				div(id="chasisInfo") {{driver.chasis}}
+			div(class="form-group col-md-2")
+				label(for="engineDetailsInfo") Engine Details
+				div(id="engineDetailsInfo") {{driver.engineDetails}}				
+			div(class="form-group col-md-2")
+				label(for="ownerInfo") Owner Name
+				div(id="ownerInfo") {{driver.owner}}			
+			div(class="form-group col-md-2")
+				label(for="mobileInfo") Mobile Number
+				div(id="mobileInfo") {{driver.mobile}}		
+			div(class="form-group col-md-2")
+				label(for="addressInfo") Address
+				div(id="addressInfo") {{driver.address}}	
+		div(class="row")
+			h4(class="modal-title", style="padding-left:15px") Paper Expiry Details
+			<hr>
+		div(class="row")
+			div(class="form-group col-md-2") 
+				label(for="taxAmountInfo") Tax Amount
+				div(id="taxAmountInfo") {{driver.tax}}
+			div(class="form-group col-md-2") 
+				label(for="taxExpiryInfo") Tax Expiry
+				div(id="taxExpiryInfo") {{formatDate(driver.taxExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="fitnessExpiryInfo") Fitness Expiry
+				div(id="fitnessExpiryInfo") {{formatDate(driver.fitnessExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="permitExpiryInfo") Permit Expiry
+				div(id="permitExpiryInfo") {{formatDate(driver.permitExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="nationalPermitInfo") National Permit
+				div(id="nationalPermitInfo") {{formatDate(driver.nationalPermitExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="insuranceExpiryInfo") Insurance Expiry
+				div(id="insuranceExpiryInfo") {{formatDate(driver.insuranceExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="professionalTaxInfo") Prof. Tax
+				div(id="professionalTaxInfo") {{driver.professionalTax}}
+			div(class="form-group col-md-2") 
+				label(for="professionalTaxExpiryInfo") Prof. Tax Expiry
+				div(id="professionalTaxExpiryInfo") {{formatDate(driver.professionalTaxExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="greenTaxInfo") Green Tax
+				div(id="greenTaxInfo") {{formatDate(driver.greenTaxExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="counterTaxExpiryInfo") Counter Tax Expiry
+				div(id="counterTaxExpiryInfo") {{formatDate(driver.counterTaxExpiry)}}
+			div(class="form-group col-md-2") 
+				label(for="counterPermitExpiryInfo") Counter Permit Expiry
+				div(id="counterPermitExpiryInfo") {{formatDate(driver.counterPermitExpiry)}}	
+			div(class="form-group col-md-2") 
+				label(for="counterPermitExpiryInfo") H. Chem. Expiry
+				div(id="CTRExpiryInfo") {{formatDate(driver.HChemExpiry)}}
+modal(title="Add new Vehical", visible="showModal")
+	form(name= "entryForm")
+		div(class="form-group col-md-3")
+			label(for="vehicalNumber") Vehical number
+			input(class="form-control", id="vehicalNumber", ng-model = "driver.vehicalNumber", placeholder="Enter Vehical Number")
+		div(class="form-group col-md-3")
+			label(for="chasis") Chasis Number
+			input(class="form-control", id="chasis", ng-model = "driver.chasis", placeholder="Enter Chasis Number")
+		div(class="form-group col-md-6")
+			label(for="engineDetails") Engine Details
+			input(class="form-control", id="engineDetails", ng-model = "driver.engineDetails", placeholder="Engine Details")
+		div(class="form-group col-md-3")
+			label(for="owner") Owner Name
+			input(class="form-control", id="owner", ng-model = "driver.owner", placeholder="Enter Owner Name")
+		div(class="form-group col-md-3")
+			label(for="mobile") Mobile no
+			input(class="form-control", id="mobile", ng-model = "driver.mobile", placeholder="Mobile No")
+		div(class="form-group col-md-6")
+			label(for="address") Address
+			input(class="form-control", id="address", ng-model = "driver.address", placeholder="Address")
+		div(class="") 
+			h4(class="modal-title" style="padding-left:15px") Paper Expiry Details
+		div(class="row")
+			div(class="form-group col-md-3")
+				label(for="tax") Tax Amount
+				input(class="form-control", id="tax", ng-model = "driver.tax")
+			div(class="form-group col-md-3")
+				label(for="taxExpiry") Tax Expiry
+				|<input  style="display:inline;width:70%" id="taxExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.taxExpiry" is-open="expiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="fitnessExpiry") Fitness Expiry
+				|<input style="display:inline;width:70%" id="fitnessExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.fitnessExpiry" is-open="fitnessExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openFitnessExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="permitExpiry") Permit Expiry
+				|<input style="display:inline;width:70%" id="permitExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.permitExpiry" is-open="permitExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openPermitExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="nationalPermit") National Permit
+				|<input style="display:inline;width:70%" id="nationalPermit", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.nationalPermitExpiry" is-open="nationalPermitExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openNationalPermitExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="insuranceExpiry") Insurance Expiry
+				|<input style="display:inline;width:70%" id="insuranceExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.insuranceExpiry" is-open="insuranceExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openInsuranceExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="professionalTax") Prof. Tax
+				input(class="form-control", id="professionalTax", ng-model = "driver.professionalTax", placeholder="Prof Tax")
+			div(class="form-group col-md-3")
+				label(for="professionalTaxExpiry") Prof. Tax Expiry
+				|<input style="display:inline;width:70%" id="professionalTaxExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.professionalTaxExpiry" is-open="professionalTaxExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openProfessionalTaxExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="counterTaxExpiry") Counter Tax Expiry
+				|<input style="display:inline;width:70%" id="counterTaxExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.counterTaxExpiry" is-open="counterTaxExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openCounterTaxExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="counterPermitExpiry") Counter Permit Expiry
+				|<input style="display:inline;width:70%" id="counterPermitExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.counterPermitExpiry" is-open="counterPermitExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openCounterPermitExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>		
+			div(class="form-group col-md-3")
+				label(for="greenTaxExpiry") Green Tax Expiry
+				|<input style="display:inline;width:70%" id="greenTaxExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.greenTaxExpiry" is-open="greenTaxExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openGreenTaxExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>
+			div(class="form-group col-md-3")
+				label(for="HChemExpiry") H. Chem. Expiry
+				|<input style="display:inline;width:70%" id="HChemExpiry", type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="driver.HChemExpiry" is-open="HChemExpiryPicker.opened"/><span style="display:inline" class="input-group-btn"><button style= "margin-top: -5px;" type="button" class="btn btn-default" ng-click="openHChemExpiryPicker()"><i class="glyphicon glyphicon-calendar"></i></button></span>	
+			div(class="col-md-8")
+				|<div ngf-max-size="20MB" ngf-drop ng-model="file" class="drop-box" name= "file" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" ngf-select ngf-pattern="'image/*,application/pdf'">Drop pdfs or images here or click to upload</div><div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>File:<ul><li style="font:smaller">{{file.name}} {{file.$error}} {{file.$errorParam}}</li></ul><p>{{progress}}</p>
+			div(class="col-md-4")
+				div(ng-show="driver.attachment!=undefned")
+					label() {{driver.attachment}}
+					span(class="btn btn-primary", ng-click="downloadAttachment('{{driver.attachment}}')") Download
+		div(class="row")
+			button(type="submit", style="margin-left:15px", class="btn btn-default", ng-click="save()")
+				|Save
+div(class= "row")
+	div(class= "col-md-12", style="font-size:20px")
+		div(style="padding: 4px")
+			div(style="padding 4px;")
+				b
+					|Vehical List
+div(class= "row")
+	div(class= "col-md-12")				
+		a(href="javascript:void(0)",id= "btnAddNew" ng-click="toggleModal()")
+			i(class="fa fa-plus")
+			|Add a Vehical	
+div(class= "row")
+	div(class= "col-md-12")
+		table(st-table="displayVehicals",st-safe-src="stSafeSrc", class="table table-striped")
+			thead
+				tr
+					th(style="padding:3px!important;",colspan="1")
+						input(st-search="", class="form-control", placeholder="Search ...", type="text" style="width:120px!important")
+					th(style="padding:3px!important;",colspan="9")
+						div(class="controls")
+							select(style="width: 150px;display: inline;margin-right:30px" class= "form-control", ng-model="filterStatus", ng-options="value.id as value.description for value in filterStatuses", ng-change="filterChanged()")
+							label(ng-repeat="item in filters" style="padding-right: 10px")
+								input(type="checkbox", style="display:inline",  ng-model="item.selected" ng-change="filterChanged()") 
+								|{{item.text}}
+					th
+						button(style= "display:inline;", type="button", ng-click="downloadCSV()", class="btn btn-sm btn-primary")
+								i(class="glyphicon glyphicon-download-alt")
+					th
+						input(type="file",class="btn btn-sm btn-primary", id= "fileUpload" style="display:none", file-change="uploadCSV($event,files)", ng-model="MyFiles")
+						button(style= "display:inline;", type="button", onclick="document.getElementById('fileUpload').click()", class="btn btn-sm btn-primary")
+							i(class="glyphicon glyphicon-upload")
+				tr
+					th(style="padding:3px!important;",st-sort="vehicalNumber",colspan="1") Vehical #
+					th(style="padding:3px!important;",st-sort="taxExpiry",st-sort-default="{{isDefaultSorted(0)}}") Tax
+					th(style="padding:3px!important;",st-sort="fitnessExpiery", st-sort-default="{{isDefaultSorted(1)}}") Fitness
+					th(style="padding:3px!important;",st-sort="permitExpiery", st-sort-default="{{isDefaultSorted(2)}}") Permit 
+					th(style="padding:3px!important;",st-sort="insuranceExpiry", st-sort-default="{{isDefaultSorted(3)}}") Insurance
+					th(style="padding:3px!important;",st-sort="professionalTaxExpiry", st-sort-default="{{isDefaultSorted(4)}}") Prof Tax
+					th(style="padding:3px!important;",st-sort="nationalPermitExpiry", st-sort-default="{{isDefaultSorted(5)}}") National Permit
+					th(style="padding:3px!important;",st-sort="greenTax", st-sort-default="{{isDefaultSorted(6)}}") Green Tax
+					th(style="padding:3px!important;",st-sort="greenTax", st-sort-default="{{isDefaultSorted(7)}}") H. Chem.
+					th
+					th
+					th
+			tbody
+				tr(ng-repeat="row in displayVehicals")
+					td(style="padding:3px!important;vertical-align:middle!important;") {{row.vehicalNumber}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.taxExpiry)}}") {{row.taxExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.fitnessExpiry)}}") {{row.fitnessExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.permitExpiry)}}") {{row.permitExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.insuranceExpiry)}}") {{row.insuranceExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.professionalTaxExpiry)}}") {{row.professionalTaxExpiry|date}}
+					td(style="padding-top:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.nationalPermitExpiry)}}") {{row.nationalPermitExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.greenTaxExpiry)}}") {{row.greenTaxExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.HChemExpiry)}}") {{row.HChemExpiry|date}}
+					td(style="padding:3px!important;vertical-align:middle!important;width:20px")
+						button(type="button", ng-click="showDetails(row)", class="btn btn-sm btn-success")
+							i(class="glyphicon glyphicon-eye-open")
+					td(style="padding:3px!important;vertical-align:middle!important;width:20px")
+						button(type="button", ng-click="editItem(row)", class="btn btn-sm btn-primary")
+							i(class="glyphicon glyphicon-pencil")
+					td(style="padding:3px!important;vertical-align:middle!important;width:20px")
+						button(type="button", ng-click="removeItem(row)", class="btn btn-sm btn-danger")
+							i(class="glyphicon glyphicon-trash")
+			tfoot
+				tr
+					td(colspan="15", class="text-center")
+						div(st-pagination="", st-items-by-page="itemsByPage",st-displayed-pages="5")
+modal(title="Vehicle Deletion", visible="vehicleDelModal")
+	form(role="form")
+		div(class="row")
+			div(class="form-group col-md-12") 
+				label(for="vehicalNumberInfo") Are you sure you want to delete the record?
+				div(class="row")
+			button(style="margin-left:15px" class="btn btn-default" ng-click="yes(row)")
+				|Yes
+			button(style="margin-left:15px" class="btn btn-default" data-dismiss="modal")
+				|No

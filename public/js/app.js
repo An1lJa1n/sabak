@@ -9,20 +9,20 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives','
         controller: 'IndexCtrl'
       }).
       when('/vehicalServices/:status/:field', {
-        templateUrl: 'partials/drivers',
+        templateUrl: 'partials/vehicals',
         controller: 'vehicalCtrl'
       }).
       when('/vehicalServices', {
-        templateUrl: 'partials/drivers',
+        templateUrl: 'partials/vehicals',
         controller: 'vehicalCtrl'
       }).
       when('/changePassword', {
         templateUrl: 'partials/changePassword',
-        controller: 'ChangePasswordCtrl'
+        controller: 'passwordCtrl'
       }).
-      when('/formsService', {
-        templateUrl: 'partials/formsDetail',
-        controller: 'formsCtrl'
+      when('/driverServices', {
+        templateUrl: 'partials/drivers',
+        controller: 'driversCtrl'
       }).
       otherwise({
         redirectTo: '/'

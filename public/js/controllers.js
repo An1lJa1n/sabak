@@ -132,6 +132,19 @@ angular.module("myApp.controllers", [])
     $http.get('/api/drivers/getOverdueRecord/greenTaxExpiry').
       success(function(data, status, headers, config) {
         $scope.notifications["greenTaxExpiry_Overdue"] = getRecordCount(data);
+    });  
+
+    $http.get('/api/drivers/getExpiredRecord/HChemExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["HChemExpiry_Expired"] = getRecordCount(data);
+    }); 
+    $http.get('/api/drivers/getDueRecord/HChemExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["HChemExpiry_Due"] = getRecordCount(data);
+    });
+    $http.get('/api/drivers/getOverdueRecord/HChemExpiry').
+      success(function(data, status, headers, config) {
+        $scope.notifications["HChemExpiry_Overdue"] = getRecordCount(data);
     });          
 
 }).controller('menuCtrl', function($scope,$http,$window) {
@@ -147,11 +160,11 @@ angular.module("myApp.controllers", [])
             name: 'Vehicals',
             link: '/vehicalServices'
           }, {
-            name: 'Forms',
-            link: '/formsService'
+            name: 'Drivers',
+            link: '/driverServices'
           }, {
             name: 'Change Password',
-            link: 'changePassword'
+            link: '/changePassword'
           }          
           ]
       };
@@ -192,7 +205,7 @@ angular.module("myApp.controllers", [])
     $scope.counterPermitExpiryPicker = {opened: false};
     $scope.counterTaxExpiryPicker = {opened: false};
     $scope.greenTaxExpiryPicker = {opened: false};
-    
+    $scope.HChemExpiryPicker = {opened: false};
     $scope.openExpiryPicker = function() {$scope.expiryPicker.opened = true;};
     $scope.openFitnessExpiryPicker = function() {$scope.fitnessExpiryPicker.opened = true;};
     $scope.openPermitExpiryPicker = function() {$scope.permitExpiryPicker.opened = true;};
@@ -202,6 +215,7 @@ angular.module("myApp.controllers", [])
     $scope.openCounterPermitExpiryPicker = function() {$scope.counterPermitExpiryPicker.opened = true;};
     $scope.openCounterTaxExpiryPicker = function() {$scope.counterTaxExpiryPicker.opened = true;};
     $scope.openGreenTaxExpiryPicker = function() {$scope.greenTaxExpiryPicker.opened = true;};
+    $scope.openHChemExpiryPicker=function() {$scope.HChemExpiryPicker.opened = true;};
 
     $scope.$watch('files', function () {
         $scope.upload($scope.files);
@@ -260,8 +274,8 @@ angular.module("myApp.controllers", [])
           engineDetails,owner,mobile,address,tax,formatDate(taxExpiry) AS taxExpiry,\
           formatDate(fitnessExpiry) AS fitnessExpiry,formatDate(permitExpiry) AS permitExpiry,formatDate(nationalPermitExpiry) AS nationalPermitExpiry,\
           formatDate(insuranceExpiry) AS insuranceExpiry,professionalTax,formatDate(professionalTaxExpiry) AS professionalTaxExpiry,\
-          formatDate(greenTaxExpiry) AS greenTaxExpiry,formatDate(counterTaxExpiry) AS counterTaxExpiry,formatDate(counterPermitExpiry) AS counterPermitExpiry \
-          INTO XLSXML("sabak.xls",?) FROM ?',[mystyle,$scope.stSafeSrc]);
+          formatDate(greenTaxExpiry) AS greenTaxExpiry,formatDate(counterTaxExpiry) AS counterTaxExpiry,formatDate(counterPermitExpiry) AS counterPermitExpiry, \
+          formatDate(HChemExpiry) AS HChemExpiry INTO XLSXML("sabak.xls",?) FROM ?',[mystyle,$scope.stSafeSrc]);
     };
     $scope.getColorCode = function(value){
         if(value){
@@ -313,7 +327,8 @@ angular.module("myApp.controllers", [])
         {id:4, text:'National Permit', predicate: "nationalPermitExpiry"},
         {id:5, text:'Insurance', predicate: "insuranceExpiry"},
         {id:6, text:'Prof.',predicate: "professionalTaxExpiry"},
-        {id:7, text:'Green',predicate: "greenTaxExpiry"}
+        {id:7, text:'Green',predicate: "greenTaxExpiry"},
+        {id:8, text:'H.Chem',predicate: "HChemExpiry"}
     ];
     if($routeParams.field)
       $scope.filters[parseInt($routeParams.field)].selected=true;   
@@ -343,9 +358,9 @@ angular.module("myApp.controllers", [])
     };
     $scope.applyFilters = function(item){
         if($scope.filterStatus == 0 || 
-            (!$scope.filters[0].selected && !$scope.filters[1].selected 
-              && !$scope.filters[2].selected && !$scope.filters[3].selected 
-              && !$scope.filters[4].selected && !$scope.filters[5].selected && !$scope.filters[6].selected)
+            (!$scope.filters[0].selected && !$scope.filters[1].selected && !$scope.filters[2].selected 
+              && !$scope.filters[3].selected && !$scope.filters[4].selected 
+              && !$scope.filters[5].selected && !$scope.filters[6].selected && !$scope.filters[7].selected)
         ) return true; 
         
         if($scope.filters[0].selected && isStatusOk(item["taxExpiry"])) return true;
@@ -355,6 +370,7 @@ angular.module("myApp.controllers", [])
         if($scope.filters[4].selected && isStatusOk(item["insuranceExpiry"])) return true;
         if($scope.filters[5].selected && isStatusOk(item["professionalTaxExpiry"])) return true;
         if($scope.filters[6].selected && isStatusOk(item["greenTaxExpiry"])) return true;
+        if($scope.filters[7].selected && isStatusOk(item["HChemExpiry"])) return true;
         return false;
     };
     $scope.showDetailModal=false;
@@ -382,7 +398,7 @@ angular.module("myApp.controllers", [])
         $scope.driver.greenTaxExpiry= $scope.driver.greenTaxExpiry?(new Date($scope.driver.greenTaxExpiry)).getTime():null;
         $scope.driver.counterTaxExpiry= $scope.driver.counterTaxExpiry?(new Date($scope.driver.counterTaxExpiry)).getTime():null;
         $scope.driver.counterPermitExpiry= $scope.driver.counterPermitExpiry?(new Date($scope.driver.counterPermitExpiry)).getTime():null;
-
+        $scope.driver.HChemExpiry= $scope.driver.HChemExpiry?(new Date($scope.driver.HChemExpiry)).getTime():null;
         return $scope.driver;
     };
     $scope.save  = function(){
@@ -475,7 +491,11 @@ angular.module("myApp.controllers", [])
           console.log(response);
         });
     };  
-  }).controller('formsCtrl',function($scope,$http,$filter) {
+  })
+
+
+
+  .controller('driversCtrl',function($scope,$http,$filter) {
     $scope.form = {};
     $scope.forms = [];
     $scope.showModal = false;
@@ -498,7 +518,7 @@ angular.module("myApp.controllers", [])
             $scope.showModal=false;
         });
       }  
-      else{//Add new
+      else{
         $http.post('/api/forms/save', $scope.form).success(function(data) {
               bindGrid(data);
               $scope.form = {};
@@ -524,4 +544,36 @@ angular.module("myApp.controllers", [])
       success(function(data, status, headers, config) {
          bindGrid(data);
     });
+  })
+.controller('passwordCtrl',function($scope,$http) {
+      $scope.currentPassReqd=false;
+      $scope.newPassRequired=false;
+      $scope.save = function(){
+        var fail=0;
+        if(!$scope.currentPass)
+        {
+          $scope.currentError="Kindly enter current passsword";
+          $scope.currentPassReqd=true;
+          fail=1;
+        }else if($scope.currentPass){ /*Check  current password*/
+          $scope.currentError="Kindly enter correct password";
+          $scope.currentPassReqd=true;
+          fail=1;
+        }
+
+        if(!$scope.newPassword)
+        {
+          $scope.newPassError="Kindly enter new passsword";
+          $scope.newPassRequired=true;
+          fail=1;
+        }else if($scope.newPassword.length<6){
+          $scope.newPassError="Password should be atleast 6 characters long.";
+          $scope.newPassRequired=true;
+          fail=1;
+        }
+
+        if(fail==0){
+
+        }
+      };
   });
