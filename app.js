@@ -14,8 +14,8 @@ var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
 var smtpTransport = nodemailer.createTransport(smtpTransport({
    service: "Gmail",
    auth: {
-       user: "cruelg000gle@gmail.com",
-       pass: "J@1n@n1l"
+       user: "rsabak@sabak.in",
+       pass: "Reviv@123"
    }
 }));
 var sendEmail = function(){
@@ -32,7 +32,7 @@ var sendEmail = function(){
                   (function(email) {
                     fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
                         var vechiles = vechilesSS.val();
-                        smtpTransport.sendMail({from: "cruelg000gle@gmail.com", to: email, subject: "Daily Expiry Report", text: getMessageBody(vechiles)}, function(error, response){
+                        smtpTransport.sendMail({from: "rsabak@sabak.in", to: email, subject: "Daily Expiry Report", text: getMessageBody(vechiles)}, function(error, response){
                           fb.child("clients").child(usersList[user].ClientCode).child("error").set({message: error?error.toString():"success"});
                         });
                         console.log("email Sent to " + email);  
@@ -50,7 +50,7 @@ var sendText = function(to, msg){
     request(url, function (error, response, body) {});
 };
 
-var emailJob = new cronJob( '53 08 * * *', function(){
+var emailJob = new cronJob( '46 10 * * *', function(){
     sendEmail();
 },null, true); 
 var getMessageBody = function(vechiles){
@@ -77,7 +77,7 @@ var getMessageBody = function(vechiles){
     return message;
 }; 
 
-var textJob = new cronJob( '29 12 * * *', function(){
+var textJob = new cronJob( '56 10 * * *', function(){
   fb.authWithPassword({
         email    : "info@sabak.in",password : "password"
       }, function(error, authData) {
@@ -117,7 +117,7 @@ var sess;
     res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
     res.header("Access-Control-Allow-Origin", "http://localhost");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    if(req.url.indexOf(".jpg")==0)
+    if(req.url.indexOf(".jpg")!=0)
       next()
     if(req.url.indexOf("/login")==0)
       next()
