@@ -117,8 +117,6 @@ var sess;
     res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    if(req.url.indexOf(".jpg") > 0)
-      next()
     if(req.url.indexOf("/login")==0)
       next()
     else{
