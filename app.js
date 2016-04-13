@@ -46,11 +46,11 @@ var sendEmail = function(){
 };
 
 var sendText = function(to, msg){
-    var url = "http://api.textlocal.in/send/?apiKey=BwGY3tTziYw-t2fXMRkoH9ra8g1mBY4eclj1jELBk3&numbers=" + to + "&message=" + msg + "&sender=TXTLCL"; 
-    request(url, function (error, response, body) {});
+    var url = "http://api.textlocal.in/send/?apiKey=BwGY3tTziYw-TdNbBKpZ69UqghGllbOkBQnsdfPEZT&numbers=" + to + "&message=" + msg + "&sender=RSABAK"; 
+    request(url, function (error, response, body) {console.log(response);});
 };
 
-var emailJob = new cronJob( '46 10 * * *', function(){
+var emailJob = new cronJob( '45 11 * * *', function(){
     sendEmail();
 },null, true); 
 var getMessageBody = function(vechiles){
@@ -71,13 +71,13 @@ var getMessageBody = function(vechiles){
         if(hasExpired(vechiles[key].permitExpiry)) permit++;
         if(hasExpired(vechiles[key].professionalTaxExpiry)) professionalTax++;
     }
-    var message = "Expiry summary as of today is: Tax(" + tax +"), Counter Permit(" + counterPermit +"), Fitness(" + fitness + "),";
-    message = message + "Green Tax(" + greenTax +"), Insurance(" + insurance +"), National Permit(" + national + "),";
-    message = message + "Permit(" + greenTax +"), Professional Tax(" + professionalTax +")";
+    var message = "Expiry summary as of today is: Tax(" + tax +"), Counter Permit(" + counterPermit +"), Fitness(" + fitness + "), ";
+    message = message + "Green Tax(" + greenTax +"), Insurance(" + insurance +"), National Permit(" + national + "), ";
+    message = message + "Permit(" + permit +"), Professional Tax(" + professionalTax +")";
     return message;
 }; 
 
-var textJob = new cronJob( '56 10 * * *', function(){
+var textJob = new cronJob( '03 11 * * *', function(){
   fb.authWithPassword({
         email    : "info@sabak.in",password : "password"
       }, function(error, authData) {
@@ -115,7 +115,7 @@ var sess;
   app.use(bodyParser());  
   app.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
-    res.header("Access-Control-Allow-Origin", "http://localhost");
+    res.header("Access-Control-Allow-Origin", "http://sabak.herokuapp.com");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if(req.url.indexOf(".jpg") > 0)
       next()
