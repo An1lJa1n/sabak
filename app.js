@@ -29,15 +29,16 @@ var sendEmail = function(){
               var usersArr= [];
               for(var user in usersList){
                 if(usersList[user].isEmail){
-                  (function(email) {
+                  (function(email,userId) {
                     fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
                         var vechiles = vechilesSS.val();
-                        smtpTransport.sendMail({from: "rsabak@sabak.in", to: email, subject: "Daily Expiry Report", text: getMessageBody(vechiles)}, function(error, response){
-                          fb.child("clients").child(usersList[user].ClientCode).child("error").set({message: error?error.toString():"success"});
+                        var msg = getMessageBody(vechiles)
+                        smtpTransport.sendMail({from: "rsabak@sabak.in", to: email, subject: "Daily Expiry Report", text: msg}, function(error, response){
+                          fb.child("users").child(userId).child("lastEmailStatus").set({message: msg, sentAt: (new Date()).toString()});
                         });
                         console.log("email Sent to " + email);  
                     });
-                  })(usersList[user].email);
+                  })(usersList[user].email,user);
                 }                 
               }
           });
@@ -45,14 +46,15 @@ var sendEmail = function(){
   });  
 };
 
-var sendText = function(to, msg){
-    var url = "http://api.textlocal.in/send/?apiKey=BwGY3tTziYw-TdNbBKpZ69UqghGllbOkBQnsdfPEZT&numbers=" + to + "&message=" + msg + "&sender=RSABAK"; 
-    request(url, function (error, response, body) {console.log(response);});
-};
 
-var emailJob = new cronJob( '45 11 * * *', function(){
+var emailJob = new cronJob( '03 12 * * *', function(){
     sendEmail();
 },null, true); 
+
+var textJob = new cronJob( '03 12 * * *', function(){
+    sendSMS();
+},null, true);
+
 var getMessageBody = function(vechiles){
     var minDate = Date.now() - 15*24*60*60*1000;
     var maxDate = Date.now() - 1*24*60*60*1000;
@@ -77,7 +79,7 @@ var getMessageBody = function(vechiles){
     return message;
 }; 
 
-var textJob = new cronJob( '03 11 * * *', function(){
+var sendSMS = function(){
   fb.authWithPassword({
         email    : "info@sabak.in",password : "password"
       }, function(error, authData) {
@@ -87,19 +89,21 @@ var textJob = new cronJob( '03 11 * * *', function(){
               var usersList = users.val();
               for(var user in usersList){
                  if(usersList[user].isSMS){
-                  (function(mobile) {
+                  (function(mobile,userId) {
                     fb.child("clients").child(usersList[user].ClientCode).child("vechiles").once("value", function(vechilesSS) {
                         var vechiles = vechilesSS.val();
-                        sendText(mobile,getMessageBody(vechiles));
-                        console.log("SMS Sent to " + mobile);  
+                        var msg = getMessageBody(vechiles);
+                        var url = "http://api.textlocal.in/send/?apiKey=BwGY3tTziYw-TdNbBKpZ69UqghGllbOkBQnsdfPEZT&numbers=" + mobile + "&message=" + msg + "&sender=RSABAK"; 
+                        request(url, function (error, response, body) {});
+                        fb.child("users").child(userId).child("lastSMSStatus").set({message: msg, sentAt: (new Date()).toString(), url: url});
                     });
-                  })(usersList[user].mobile);
+                  })(usersList[user].mobile, user);
                  }                 
               }
           });
       }
   });
-},  null, true);
+};
 
 var app = module.exports = express();//.createServer();
 var sess;
