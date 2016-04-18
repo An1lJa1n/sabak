@@ -47,11 +47,11 @@ var sendEmail = function(){
 };
 
 
-var emailJob = new cronJob( '03 12 * * *', function(){
+var emailJob = new cronJob( '30 03 * * *', function(){
     sendEmail();
 },null, true); 
 
-var textJob = new cronJob( '03 12 * * *', function(){
+var textJob = new cronJob( '30 03 * * *', function(){
     sendSMS();
 },null, true);
 

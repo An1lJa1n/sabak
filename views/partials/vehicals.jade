@@ -153,11 +153,11 @@ div(class= "row")
 								|{{item.text}}
 					th
 						button(style= "display:inline;", type="button", ng-click="downloadCSV()", class="btn btn-sm btn-primary")
-								i(class="glyphicon glyphicon-download-alt")
+								i(class="glyph-icon icon-download")
 					th
 						input(type="file",class="btn btn-sm btn-primary", id= "fileUpload" style="display:none", file-change="uploadCSV($event,files)", ng-model="MyFiles")
 						button(style= "display:inline;", type="button", onclick="document.getElementById('fileUpload').click()", class="btn btn-sm btn-primary")
-							i(class="glyphicon glyphicon-upload")
+							i(class="glyph-icon icon-upload")
 				tr
 					th(style="padding:3px!important;",st-sort="vehicalNumber",colspan="1") Vehical #
 					th(style="padding:3px!important;",st-sort="taxExpiry",st-sort-default="{{isDefaultSorted(0)}}") Tax
@@ -184,13 +184,13 @@ div(class= "row")
 					td(style="padding:3px!important;vertical-align:middle!important;background-color:{{getColorCode(row.HChemExpiry)}}") {{row.HChemExpiry|date}}
 					td(style="padding:3px!important;vertical-align:middle!important;width:20px")
 						button(type="button", ng-click="showDetails(row)", class="btn btn-sm btn-success")
-							i(class="glyphicon glyphicon-eye-open")
+							i(class="glyph-icon icon-eye")
 					td(style="padding:3px!important;vertical-align:middle!important;width:20px")
 						button(type="button", ng-click="editItem(row)", class="btn btn-sm btn-primary")
-							i(class="glyphicon glyphicon-pencil")
+							i(class="glyph-icon icon-pencil")
 					td(style="padding:3px!important;vertical-align:middle!important;width:20px")
 						button(type="button", ng-click="removeItem(row)", class="btn btn-sm btn-danger")
-							i(class="glyphicon glyphicon-trash")
+							i(class="glyph-icon icon-trash")
 			tfoot
 				tr
 					td(colspan="15", class="text-center")
