@@ -6,6 +6,7 @@ angular.module("myApp.controllers", [])
       for(var i in items) count++;
       return count;  
     };
+    
     /*var fieldList = ["taxExpiry","fitnessExpiry","permitExpiry","nationalPermitExpiry","insuranceExpiry","professionalTaxExpiry","counterTaxExpiry","counterPermitExpiry"];
     var statuses = ["Due","Expired","Overdue"];
     for (var i=0;i<fieldList.length;i++){
@@ -17,180 +18,148 @@ angular.module("myApp.controllers", [])
       }
     }  
     */
+    
+    var updateSummary = function(key,data){
+      var count = getRecordCount(data);
+      var summaryKey = "total" + key.split('_')[1];
+      $scope.notifications[key] =count;
+      $scope[summaryKey] = ($scope[summaryKey]?$scope[summaryKey]:0) + count; 
+    };
+    $http.get('/api/totalVechiles').
+      success(function(data, status, headers, config) {
+        $scope.totalVehicals = data;
+    }); 
+
     $http.get('/api/drivers/getExpiredRecord/taxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["taxExpiry_Expired"] = getRecordCount(data);
+        updateSummary("taxExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/taxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["taxExpiry_Due"] = getRecordCount(data);
+        updateSummary("taxExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/taxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["taxExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("taxExpiry_Overdue",data);
     });
-
     $http.get('/api/drivers/getExpiredRecord/fitnessExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["fitnessExpiry_Expired"] = getRecordCount(data);
+          updateSummary("fitnessExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/fitnessExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["fitnessExpiry_Due"] = getRecordCount(data);
+          updateSummary("fitnessExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/fitnessExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["fitnessExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("fitnessExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/permitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["permitExpiry_Expired"] = getRecordCount(data);
+        updateSummary("permitExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/permitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["permitExpiry_Due"] = getRecordCount(data);
+        updateSummary("permitExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/permitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["permitExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("permitExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/nationalPermitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["nationalPermitExpiry_Expired"] = getRecordCount(data);
+        updateSummary("nationalPermitExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/nationalPermitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["nationalPermitExpiry_Due"] = getRecordCount(data);
+        updateSummary("nationalPermitExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/nationalPermitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["nationalPermitExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("nationalPermitExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/insuranceExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["insuranceExpiry_Expired"] = getRecordCount(data);
+        updateSummary("insuranceExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/insuranceExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["insuranceExpiry_Due"] = getRecordCount(data);
+        updateSummary("insuranceExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/insuranceExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["insuranceExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("insuranceExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/professionalTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["professionalTaxExpiry_Expired"] = getRecordCount(data);
+        updateSummary("professionalTaxExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/professionalTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["professionalTaxExpiry_Due"] = getRecordCount(data);
+        updateSummary("professionalTaxExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/professionalTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["professionalTaxExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("professionalTaxExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/counterTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["counterTaxExpiry_Expired"] = getRecordCount(data);
+        updateSummary("counterTaxExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/counterTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["counterTaxExpiry_Due"] = getRecordCount(data);
+        updateSummary("counterTaxExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/counterTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["counterTaxExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("counterTaxExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/counterPermitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["counterPermitExpiry_Expired"] = getRecordCount(data);
+        updateSummary("counterPermitExpiry_Expired",data);
     });
     $http.get('/api/drivers/getDueRecord/counterPermitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["counterPermitExpiry_Due"] = getRecordCount(data);
+        updateSummary("counterPermitExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/counterPermitExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["counterPermitExpiry_Overdue"] = getRecordCount(data);
+        updateSummary("counterPermitExpiry_Overdue",data);
     });
 
     $http.get('/api/drivers/getExpiredRecord/greenTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["greenTaxExpiry_Expired"] = getRecordCount(data);
+        updateSummary("greenTaxExpiry_Expired",data);
     }); 
     $http.get('/api/drivers/getDueRecord/greenTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["greenTaxExpiry_Due"] = getRecordCount(data);
+        updateSummary("greenTaxExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/greenTaxExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["greenTaxExpiry_Overdue"] = getRecordCount(data);
+          updateSummary("greenTaxExpiry_Overdue",data);
     });  
 
     $http.get('/api/drivers/getExpiredRecord/HChemExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["HChemExpiry_Expired"] = getRecordCount(data);
+          updateSummary("HChemExpiry_Expired",data);
     }); 
     $http.get('/api/drivers/getDueRecord/HChemExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["HChemExpiry_Due"] = getRecordCount(data);
+          updateSummary("HChemExpiry_Due",data);
     });
     $http.get('/api/drivers/getOverdueRecord/HChemExpiry').
       success(function(data, status, headers, config) {
-        $scope.notifications["HChemExpiry_Overdue"] = getRecordCount(data);
+          updateSummary("HChemExpiry_Overdue",data);
     });          
 
-}).controller('menuCtrl', function($scope,$http,$window) {
-        $scope.menu = {
-        title: 'All Categories',
-        id: 'menuId',
-        icon: 'fa fa-bars',
-        items: [
-          {
-            name: 'Home',
-            link: '/addPost'
-          },{
-            name: 'Vehicals',
-            link: '/vehicalServices'
-          }, {
-            name: 'Drivers',
-            link: '/driverServices'
-          }, {
-            name: 'Change Password',
-            link: '/changePassword'
-          }          
-          ]
-      };
-      $scope.logout = function(){
-        $http.get('/logout').
-          success(function(data, status, headers, config) {
-            $window.location.href = '/login';
-        });
-      };
-
-      $scope.events = [];
-      $scope.options = {
-        containersToPush: [$('#pushobj')],
-        direction: 'ltr',
-        onExpandMenuStart: function() {
-          document.getElementById("pushobj").style.width="75%";
-        },
-        onCollapseMenuStart: function() {
-          document.getElementById("pushobj").style.width="94%";
-        }
-      };
-}).controller('servicesCtrl',function($scope,$http,$filter) {
-  })
-  .controller('appsCtrl', function($scope,$http) {
-  })
-  .controller('vehicalCtrl',function($scope,$http,$filter,$routeParams, Upload, $timeout, FileSaver) {
+}).controller('vehicalCtrl',function($scope,$http,$filter,$routeParams, Upload, $timeout, FileSaver) {
     $scope.displayDrivers = [];
     $scope.driver = {};
     $scope.drivers = [];

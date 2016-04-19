@@ -157,7 +157,7 @@ app.get('/login', routes.login);
 app.post('/login', routes.login);
 app.get('/logout', routes.logout);
 app.get('/partials/:name', routes.partials);
-
+app.get('/api/totalVechiles', driversApi.totalVechiles);
 app.get('/api/drivers/getList', driversApi.getList);
 app.post('/api/drivers/save', driversApi.save);
 app.put('/api/drivers/:id', driversApi.update);

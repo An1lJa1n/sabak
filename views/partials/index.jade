@@ -2,25 +2,25 @@ div
 	div(class="row")
 		div(class="col-md-3")
 			a(href="#", title="Example tile shortcut", class="tile-box tile-box-shortcut btn-primary")
-				span(class="bs-badge badge-absolute") 5
+				span(class="bs-badge badge-absolute") {{totalVehicals}}
 				div(class="tile-header") Total Vehicles
 				div(class="tile-content-wrapper")
 					i(class="glyph-icon icon-dashboard")
 		div(class="col-md-3")
 			a(href="#", title="Example tile shortcut", class="tile-box tile-box-shortcut btn-warning")
-				span(class="bs-badge badge-absolute") 10
-				div(class="tile-header") Total Drivers
+				span(class="bs-badge badge-absolute") {{totalExpired}}
+				div(class="tile-header") Total Expired 
 				div(class="tile-content-wrapper")
 					i(class="glyph-icon icon-cogs")					
 		div(class="col-md-3")
 			a(href="#", title="Example tile shortcut", class="tile-box tile-box-shortcut btn-danger")
-				span(class="bs-badge badge-absolute") 15
+				span(class="bs-badge badge-absolute") {{totalDue}}
 				div(class="tile-header") Total due
 				div(class="tile-content-wrapper")
 					i(class="glyph-icon icon-code-fork")
 		div(class="col-md-3")
 			a(href="#", title="Example tile shortcut", class="tile-box tile-box-shortcut btn-info")
-				span(class="bs-badge badge-absolute") 20
+				span(class="bs-badge badge-absolute") {{totalOverdue}}
 				div(class="tile-header") Total overdue
 				div(class="tile-content-wrapper")
 					i(class="glyph-icon icon-desktop")

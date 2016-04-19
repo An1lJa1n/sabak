@@ -21,6 +21,14 @@ exports.getOverdueRecord = function (req, res) {
 	});
 };
 
+exports.totalVechiles = function (req, res) {
+	firebaseRef.child("clients").child(req.session.userProile.ClientCode).child("vechiles").once("value",function(data){
+		var count=0;
+		var recrods = data.val();
+		for(var i in recrods) count++;
+      	res.json(count);		
+	});	
+};
 exports.getList = function (req, res) {
 	firebaseRef.child("clients").child(req.session.userProile.ClientCode).child("vechiles").once("value",function(data){
 		res.json(data.val());		
