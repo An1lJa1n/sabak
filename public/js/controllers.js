@@ -1,4 +1,17 @@
 angular.module("myApp.controllers", [])
+.controller('userCtrl', function($scope,$http,$window) {
+      $http.get('/userInfo').
+          success(function(data, status, headers, config) {
+              $scope.userName = data.name;
+              $scope.clientName = data.clientName;
+      });
+      $scope.logout = function(){
+        $http.get('/logout').
+          success(function(data, status, headers, config) {
+            $window.location.href = '/login';
+        });
+      };
+})
 .controller("IndexCtrl", function ($rootScope, $scope, $http) {
     $scope.notifications ={};
     var getRecordCount = function(items){

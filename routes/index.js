@@ -20,7 +20,10 @@ exports.login = function(req, res){
 		});	
 	}else
 		res.render('login');
-}
+};
+exports.userInfo = function(req, res){
+	res.json({name:req.session.userProile.Name, clientName: req.session.userProile.clientName});
+};
 exports.index = function(req, res){
 	res.render('index');
 };

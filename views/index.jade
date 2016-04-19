@@ -7,7 +7,7 @@ block body
 				.bounce2          
 				.bounce3  
 		#page-wrapper
-			#page-header.bg-gradient-9
+			#page-header.bg-gradient-9(ng-controller="userCtrl")
 				#mobile-navigation
 					button#nav-toggle.collapsed(data-toggle='collapse', data-target='#page-sidebar')
 						span                    
@@ -21,8 +21,8 @@ block body
 				#header-nav-left
 					.user-account-btn.dropdown
 						a.user-profile.clearfix(href='#', title='My Account', data-toggle='dropdown')
-							img(width='28', src='../../assets/image-resources/gravatar.jpg', alt='Profile image')                                
-							span Thomas Barnes
+							img(width='28', src='../../assets/image-resources/gravatar.jpg', alt='Profile image')                      
+							span {{userName}}
 							i.glyph-icon.icon-angle-down
 						.dropdown-menu.float-left
 							.box-sm
@@ -31,16 +31,15 @@ block body
 										a.change-img(href='#', title='') Change photo
 										img(src='../../assets/image-resources/gravatar.jpg', alt='')
 									.user-info
-										span
-											| Thomas Barnes
-											i UX/UI developer
+										span {{userName}}
 										a(href='#', title='Edit profile') Edit profile
 										a(href='#', title='View notifications') View notifications
 								.divider
 								.pad5A.button-pane.button-pane-alt.text-center
-									a.btn.display-block.font-normal.btn-danger(href='#')
+									button(type="button", ng-click="logout()", class="btn btn-sm btn-danger")
 										i.glyph-icon.icon-power-off
-										|                                             Logout
+				#header-nav-left(style="padding-top: 20px;font-size:30px;color: white;")
+					span {{clientName}}
 				#header-nav-right
 					a.hdr-btn.popover-button(href='#', title='Search', data-placement='bottom', data-id='#popover-search')
 						i.glyph-icon.icon-search
