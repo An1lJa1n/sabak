@@ -1,5 +1,4 @@
-var express = require('express'),routes = require('./routes'),driversApi = require('./routes/api'),formsApi = require('./routes/formsApi'),
-  session = require('express-session'),fbInstanceForJob = require("firebase"), bodyParser = require('body-parser'),multer = require('multer');
+var express = require('express'),routes = require('./routes'),driversApi = require('./routes/api'),formsApi = require('./routes/formsApi'),session = require('express-session'),fbInstanceForJob = require("firebase"), bodyParser = require('body-parser'),multer = require('multer');
 
 var path = require('path');
 var mime = require('mime');
@@ -11,17 +10,13 @@ var request = require('request');
 var twilio = require('twilio'), client = twilio('AC544fe7786d619ac8e6c4cc76bdaa6aa9', '10806eada03a367712e6c8ea5739cc2b'), cronJob = require('cron').CronJob;
 
 var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
-var smtpTransport = nodemailer.createTransport(smtpTransport({
-   service: "Gmail",
-   auth: {
-       user: "rsabak@sabak.in",
-       pass: "Reviv@123"
-   }
-}));
+var smtpTransport = nodemailer.createTransport(smtpTransport({service: "Gmail",auth: {user: "rsabak@sabak.in",pass: "Reviv@123"}}));
+
+var emailJob = new cronJob( '00 30 3 * * *', function(){sendEmail();},null, true); 
+var textJob = new cronJob( '00 30 3 * * *', function(){sendSMS();},null, true);
+
 var sendEmail = function(){
-  fb.authWithPassword({
-        email    : "info@sabak.in",password : "password"
-      }, function(error, authData) {
+  fb.authWithPassword({email    : "info@sabak.in",password : "password"}, function(error, authData) {
         if (error) console.log("Login Failed!", error);
         else {
           fb.child("EmilJobStatus").set({lastSent: (new Date()).toString()});
@@ -46,15 +41,6 @@ var sendEmail = function(){
       }
   });  
 };
-
-
-var emailJob = new cronJob( '00 30 3 * * *', function(){
-    sendEmail();
-},null, true); 
-
-var textJob = new cronJob( '00 30 3 * * *', function(){
-    sendSMS();
-},null, true);
 
 var getMessageBody = function(vechiles){
     var minDate = Date.now() - 15*24*60*60*1000;
@@ -81,9 +67,7 @@ var getMessageBody = function(vechiles){
 }; 
 
 var sendSMS = function(){
-  fb.authWithPassword({
-        email    : "info@sabak.in",password : "password"
-      }, function(error, authData) {
+  fb.authWithPassword({email: "info@sabak.in",password : "password"}, function(error, authData) {
         if (error) console.log("Login Failed!", error);
         else {
           fb.child("SMSJobStatus").set({date: (new Date()).toString()});
@@ -121,8 +105,8 @@ var sess;
   app.use(bodyParser());  
   app.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
-    //res.header("Access-Control-Allow-Origin", "*");
-    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if(req.url.indexOf(".jpg") > 0)
       next()
     if(req.url.indexOf("/login")==0)
@@ -139,21 +123,14 @@ var sess;
   //app.use(app.router);
 //});
 
-var storage = multer.diskStorage({ //multers disk storage settings
-        destination: function (req, file, cb) {
-            cb(null, './uploads/')
-        },
-        filename: function (req, file, cb) {
-            cb(null, file.originalname);
-        }
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {cb(null, './uploads/')},
+    filename: function (req, file, cb) {cb(null, file.originalname);}
 });
 
 var upload = multer({storage: storage}).single('file');
-
 //app.use(express.errorHandler());
-
 // Routes
-
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', routes.login);
@@ -183,13 +160,9 @@ app.post('/api/upload', function(req, res) {
         })
 });
 app.post('/api/download', function(req, res){
-  console.log(req.body.filename);
   var filePath = path.join(__dirname, 'uploads', req.body.filename);
-  console.log(filePath);
   var filename = path.basename(filePath);
   var mimetype = mime.lookup(filePath);
-  console.log(mimetype);
-  
   var stat = fs.statSync(filePath);
   var fileToSend = fs.readFileSync(filePath);
   res.setHeader('Content-Type', mimetype);
@@ -198,6 +171,4 @@ app.post('/api/download', function(req, res){
   res.send(fileToSend);
 });
 app.get('*', routes.index);
-app.listen(process.env.PORT || 3000, function(){
-  //console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-});
+app.listen(process.env.PORT || 3000, function(){});
