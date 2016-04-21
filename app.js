@@ -24,6 +24,7 @@ var sendEmail = function(){
       }, function(error, authData) {
         if (error) console.log("Login Failed!", error);
         else {
+          fb.child("EmilJobStatus").set({lastSent: (new Date()).toString()});
           fb.child("users").once("value",function(users){
               var usersList = users.val();
               var usersArr= [];
@@ -47,11 +48,11 @@ var sendEmail = function(){
 };
 
 
-var emailJob = new cronJob( '30 03 * * *', function(){
+var emailJob = new cronJob( '00 30 3 * * *', function(){
     sendEmail();
 },null, true); 
 
-var textJob = new cronJob( '30 03 * * *', function(){
+var textJob = new cronJob( '00 30 3 * * *', function(){
     sendSMS();
 },null, true);
 
@@ -85,6 +86,7 @@ var sendSMS = function(){
       }, function(error, authData) {
         if (error) console.log("Login Failed!", error);
         else {
+          fb.child("SMSJobStatus").set({date: (new Date()).toString()});
           fb.child("users").once("value",function(users){
               var usersList = users.val();
               for(var user in usersList){
