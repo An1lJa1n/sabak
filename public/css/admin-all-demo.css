@@ -15911,7 +15911,8 @@ li.active a.list-group-item:hover {
     font-size: 12px;
     width: 100%;
     border-spacing: 0;
-    border-collapse: separate
+    border-collapse: separate;
+    color: black!important;
 }
 .table>caption+thead>tr:first-child>td,
 .table>caption+thead>tr:first-child>th,
