@@ -13107,18 +13107,18 @@ div[id^=uniform-] span {
 }
 .badge,
 .bs-badge {
-    font-size: 11px;
+    font-size: 22px;
     font-weight: 700;
-    line-height: 19px;
+    line-height: 40px;
     display: inline-block;
-    min-width: 20px;
-    height: 20px;
+    min-width: 40px;
+    height: 40px;
     padding: 0 4px 0 5px;
     text-align: center;
     vertical-align: baseline;
     white-space: nowrap;
     color: #fff;
-    border-radius: 10px
+    border-radius: 30px;
 }
 .badge-small {
     min-width: 10px;
@@ -16137,8 +16137,8 @@ a.tile-box.btn:hover .tile-header .float-right {
     position: absolute;
     right: 10px;
     bottom: 6px;
-    font-size: 13px;
-    font-weight: 400
+    font-size: 15px;
+    font-weight: 700;
 }
 .tile-box-shortcut .bs-badge {
     left: auto;
