@@ -134,6 +134,7 @@ app.get('/login', routes.login);
 app.post('/login', routes.login);
 app.get('/logout', routes.logout);
 app.get('/userInfo',routes.userInfo);
+app.post('/changePassword',routes.changePassword);
 app.get('/partials/:name', routes.partials);
 app.get('/api/totalVechiles', driversApi.totalVechiles);
 app.get('/api/drivers/getList', driversApi.getList);

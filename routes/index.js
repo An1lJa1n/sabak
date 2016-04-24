@@ -14,6 +14,7 @@ exports.login = function(req, res){
 				console.log(authData.uid);
 				firebaseRef.child("users").child(authData.uid).once("value", function(data) {
   					req.session.userProile = data.val();
+  					req.session.userProile.email =req.body.email;
   					res.render('index');
 				});
 			}
@@ -24,6 +25,24 @@ exports.login = function(req, res){
 exports.userInfo = function(req, res){
 	res.json({name:req.session.userProile.Name, clientName: req.session.userProile.clientName});
 };
+
+exports.changePassword = function(req, res){
+	firebaseRef.changePassword({
+	  email: req.session.userProile.email,
+	  oldPassword: req.body.oldPassword,
+	  newPassword: req.body.newPassword
+	}, function(error) {
+	  if (error) res.json({error: "Unable to change password"});
+	  else {
+	  	firebaseRef.unauth();
+		req.session.userProile= undefined;
+	  	res.json({});
+	  }
+	});
+};
+
+
+
 exports.index = function(req, res){
 	res.render('index');
 };

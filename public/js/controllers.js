@@ -5,11 +5,27 @@ angular.module("myApp.controllers", [])
               $scope.userName = data.name;
               $scope.clientName = data.clientName;
       });
+      $scope.isInvalidResetPwd = !($scope.confirmNewPassword == $scope.newPassword && $scope.newPassword == "" && $scope.oldPassword=="");
       $scope.logout = function(){
         $http.get('/logout').
           success(function(data, status, headers, config) {
             $window.location.href = '/login';
         });
+      };
+      $scope.user = {confirmNewPassword : "",newPassword :"",oldPassword: ""};
+      $scope.changePassword= function(){
+          if ($scope.user.newPassword != $scope.user.confirmNewPassword || $scope.user.oldPassword==""){
+              alert("Provided details are incorrect");
+              return;
+          }
+          $http.post('/changePassword', {oldPassword:$scope.user.oldPassword,newPassword: $scope.user.newPassword}).
+            success(function(data, status, headers, config) {
+                if(data.error) alert("Unable to change password");
+                else {
+                  alert("Password changed successfully! Please login again");
+                  $window.location.href = '/login';
+                }  
+            });
       };
 })
 .controller("IndexCtrl", function ($rootScope, $scope, $http) {
