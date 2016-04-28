@@ -18,20 +18,9 @@ var stayAwakeJob = new cronJob( '0 */45 * * * *', function(){
   });
 },null, true); 
 
-var emailJob = new cronJob({
-    cronTime: '00 00 13 * * *',
-    onTick: sendEmail,
-    start: false,
-    timeZone: 'Asia/Calcutta'
-});
+var emailJob = new cronJob('00 04 14 * * *',function(){sendEmail();},null,true);
+var textJob = new cronJob('00 04 14 * * *',function(){sendSMS();},null,true);
  
-var textJob = new cronJob({
-    cronTime: '00 15 13 * * *',
-    onTick: sendSMS,
-    start: false,
-    timeZone: 'Asia/Calcutta'
-});
-
 var sendEmail = function(){
   fb.authWithPassword({email    : "info@sabak.in",password : "password"}, function(error, authData) {
         if (error) console.log("Login Failed!", error);
