@@ -12,8 +12,25 @@ var twilio = require('twilio'), client = twilio('AC544fe7786d619ac8e6c4cc76bdaa6
 var fb = new fbInstanceForJob("https://sabak.firebaseio.com/");
 var smtpTransport = nodemailer.createTransport(smtpTransport({service: "Gmail",auth: {user: "rsabak@sabak.in",pass: "Reviv@123"}}));
 
-var emailJob = new cronJob( '00 30 3 * * *', function(){sendEmail();},null, true); 
-var textJob = new cronJob( '00 30 3 * * *', function(){sendSMS();},null, true);
+var stayAwakeJob = new cronJob( '0 */45 * * * *', function(){
+  request('http://sabak.herokuapp.com', function (error, response, body) {
+    if (!error && response.statusCode == 200) console.log(body); // Show the HTML for the Google homepage. 
+  });
+},null, true); 
+
+var emailJob = new cronJob({
+    cronTime: '00 00 13 * * *',
+    onTick: sendEmail,
+    start: false,
+    timeZone: 'Asia/Calcutta'
+});
+ 
+var textJob = new cronJob({
+    cronTime: '00 15 13 * * *',
+    onTick: sendSMS,
+    start: false,
+    timeZone: 'Asia/Calcutta'
+});
 
 var sendEmail = function(){
   fb.authWithPassword({email    : "info@sabak.in",password : "password"}, function(error, authData) {
